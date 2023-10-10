@@ -31,3 +31,11 @@ model Matkul {
 
   Dosen Dosen[]
 }
+
+model Mahasiswa {
+  id        Int      @id @default(autoincrement())
+  mhsName String   @unique
+  nim Int   @unique
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+}
