@@ -10,6 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// admin models
+
 model Dosen {
   id        Int      @id @default(autoincrement())
   dosenName String   @unique
