@@ -10,12 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// admin models
+
 model Dosen {
   id        Int    @id @default(autoincrement())
   dosenName String @unique
 
-  matkulId Int?
-  matkul   Matkul? @relation(fields: [matkulId], references: [id])
+  // matkulId Int?
+  // matkul   Matkul? @relation(fields: [matkulId], references: [id])
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
@@ -29,7 +31,7 @@ model Matkul {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 
-  Dosen Dosen[]
+  // Dosen Dosen[]
 }
 
 model Mahasiswa {
