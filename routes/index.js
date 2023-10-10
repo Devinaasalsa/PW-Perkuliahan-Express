@@ -1,12 +1,12 @@
-import express from "express";
-import {
-  getMahasiswa,
-} from "../controllers/mahasiswaController.js"
+const express = require('express');
+const MahasiswaController = require('../controllers/mahasiswaController.js');
 
 
 const router = express.Router();
+const mahasiswaController = new MahasiswaController();
 
 /* GET home page. */
-router.get('/getMahasiswa', getMahasiswa);
+router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
+router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
 
 module.exports = router;
