@@ -39,3 +39,5 @@ model Mahasiswa {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
+
+
