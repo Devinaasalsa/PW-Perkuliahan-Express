@@ -1,15 +1,53 @@
-// import { Mahasiswa } from "@prisma/client";
-import { Mahasiswa } from "@prisma/client";
-var Prisma = require('@prisma/client');
+
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-export const getMahasiswa = async (_req, res) => {
+
+class MahasiswaController {
+    async getAllMahasiswa(req, res) {
     try {
-        
-        const mahasiswa = await prisma.mahasiswa.findMany({});
-        res.status(200).json(mahasiswa);
+        const mahasiswas = await prisma.mahasiswa.findMany();
+        res.status(200).json(mahasiswas);
     } catch (error) {
-        res.status(500).json({ msg: error.message });
+        console.error("Terjadi kesalahan saat menampilkan data Mahasiswa", error);
+        res
+          .status(500)
+          .json({ error: "Terjadi kesalahan saat menampilkan data Mahasiswa" });
+      }
+}
+
+    async createMahasiswa(req, res) {
+    const { mhsName, nim } = req.body;
+    try {
+      const existingNim = await prisma.mahasiswa.findUnique({
+        where: {
+          nim: nim,
+        },
+      });
+
+      if (existingNim) {
+        return res.json({
+          error: "Nim telah terdaftar",
+        });
+      }
+      const newMahasiswa = { mhsName, nim };
+      const mahasiswas = await prisma.mahasiswa.create({
+        data: {
+          ...newMahasiswa,
+        },
+      });
+      res.json(mahasiswas);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat mendaftarkan Mahasiswa", error);
+      res
+        .status(500)
+        .json({ error: "Terjadi kesalahan saat mendaftarkan Mahasiswa" });
     }
 }
+    async updateMahasiswa(req, res){
+        
+    }
+
+};
+module.exports = MahasiswaController;
