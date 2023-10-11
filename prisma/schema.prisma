@@ -13,31 +13,31 @@ datasource db {
 // admin models
 
 model Dosen {
-  id        Int    @id @default(autoincrement())
-  dosenName String @unique
-
-  // matkulId Int?
-  // matkul   Matkul? @relation(fields: [matkulId], references: [id])
-
+  id        Int      @id @default(autoincrement())
+  dosenName String   @unique
+  matkulId  Int
+  matkul    Matkul   @relation(fields: [matkulId], references: [id])
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
 
 model Matkul {
-  id        Int      @id @default(autoincrement())
-  code      String   @unique
-  jmlSks    Int
-  semester  Int
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt()
-
-  // Dosen Dosen[]
+  id         Int      @id @default(autoincrement())
+  code       String   @unique
+  namaMatkul String   @unique
+  jmlSks     Int
+  semester   Int
+  dosen      Dosen[]
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt()
 }
 
 model Mahasiswa {
   id        Int       @id @default(autoincrement())
   mhsName   String    @unique
   nim       Int       @unique
+  absensi   Absensi[]
+
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt()
 }
@@ -53,3 +53,22 @@ model AcaraBerita {
 
 }
 
+
+
+model Absensi {
+  id Int @id @default(autoincrement())
+
+  mahasiswaId Int
+  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
+
+  statusId Int
+  totalHadir Int
+  
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+}
+
+model Status {
+  id Int @id @default(autoincrement())
+  statusName String
+}
