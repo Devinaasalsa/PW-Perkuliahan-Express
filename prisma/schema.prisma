@@ -35,11 +35,21 @@ model Matkul {
 }
 
 model Mahasiswa {
-  id        Int      @id @default(autoincrement())
-  mhsName String   @unique
-  nim Int   @unique
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt()
+  id        Int       @id @default(autoincrement())
+  mhsName   String    @unique
+  nim       Int       @unique
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt()
 }
 
+model AcaraBerita {
+  id          Int       @id @default(autoincrement())
+  date        DateTime
+  jamMasuk    Int
+  jamKeluar   Int 
+  descMateri  String
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt()
+
+}
 
