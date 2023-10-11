@@ -49,6 +49,7 @@ model Absensi {
 
   statusId Int
   totalHadir Int
+  
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }

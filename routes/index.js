@@ -2,11 +2,13 @@ const express = require('express');
 const MahasiswaController = require('../controllers/mahasiswaController.js');
 const MatkulController = require('../controllers/matkulController.js');
 const DosenController = require('../controllers/dosenController.js');
+const AbsensiController = require('../controllers/absensiController.js')
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
 const matkulController = new MatkulController();
 const dosenController = new DosenController();
+const absensiController = new AbsensiController();
 
 /* GET home page. */
 router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
@@ -27,5 +29,9 @@ router.get('/getMatkul', matkulController.getAllMatkul);
 router.post('/createMatkul', matkulController.createMatkul);
 router.patch('/updateMatkul/:id', matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
+
+
+router.get('/getAbsen', absensiController.inputAbsensi);
+router.post('/inputAbsen', absensiController.inputAbsensi);
 
 module.exports = router;
