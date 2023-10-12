@@ -40,5 +40,8 @@ router.post('/inputAbsen', absensiController.inputAbsensi);
 //rute of acara berita page
 router.get('/getAcaraBerita', acaraBeritaController.getAllAcaraBerita)
 router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
+router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
+router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)
+
 
 module.exports = router;
