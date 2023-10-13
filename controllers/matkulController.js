@@ -28,8 +28,20 @@ class MatkulController {
       });
 
       if (existingCode) {
-        return res.json({
-          error: "Code telah terdaftar",
+        return res.status(500).json({
+          error: "Gagal menambahkan mata kuliah, code telah terdaftar",
+        });
+      }
+
+      const existingMatkul = await prisma.matkul.findUnique({
+        where: {
+          namaMatkul: namaMatkul,
+        },
+      });
+
+      if (existingMatkul) {
+        return res.status(500).json({
+          error: "Gagal menambahkan mata kuliah, mata kuliah telah terdaftar",
         });
       }
       const newMatkul = { code, namaMatkul, jmlSks, semester, dosenId };
