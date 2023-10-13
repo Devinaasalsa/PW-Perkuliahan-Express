@@ -96,3 +96,19 @@ model Status {
   id         Int    @id @default(autoincrement())
   statusName String
 }
+
+model NilaiAkhir {
+    id         Int    @id @default(autoincrement())
+  totalAbsen Int 
+  nilaiTugas Float
+  uts Float
+  uas Float
+  absenPercent Float
+  tugasPercent Float
+  utsPercent Float
+  uasPercent Float
+  angkaMutu Float
+  hurufMutu String
+  ket String
+
+}
