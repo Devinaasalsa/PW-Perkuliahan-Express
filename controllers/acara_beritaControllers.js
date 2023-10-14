@@ -36,12 +36,13 @@ class AcaraBeritaController {
     async createAcaraBerita(req, res) {
         const { date, jamMasuk, jamKeluar, descMateri } = req.body
         try {
-            const exitingAcaraBerita = await prisma.acaraBerita.findFirst({
-                where: {
-                    date: new Date(date),
-                },
-            });
-            console.log(exitingAcaraBerita);
+            
+            // const exitingAcaraBerita = await prisma.acaraBerita.findFirst({
+            //     where: {
+            //         date: new Date(date),
+            //     },
+            // });
+            // console.log(exitingAcaraBerita);
 
             // if (exitingAcaraBerita) {
             //     return res.json({

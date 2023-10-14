@@ -4,6 +4,7 @@ const MatkulController = require('../controllers/matkulController.js');
 const DosenController = require('../controllers/dosenController.js');
 const AcaraBeritaController = require('../controllers/acara_beritaControllers.js')
 const AbsensiController = require('../controllers/absensiController.js')
+const TugasController = require('../controllers/tugasController.js')
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -11,6 +12,10 @@ const matkulController = new MatkulController();
 const dosenController = new DosenController();
 const acaraBeritaController = new AcaraBeritaController();
 const absensiController = new AbsensiController();
+const tugasController = new TugasController();
+
+
+
 
 /* GET home page. */
 router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
@@ -42,6 +47,14 @@ router.get('/getAcaraBerita', acaraBeritaController.getAllAcaraBerita)
 router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
 router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
 router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)
+
+router.get('/getTugas', tugasController.getAllTugas)
+router.get('/getTugas/:id', tugasController.getTugasById)
+router.post('/createTugas', tugasController.createTugas)
+router.put('/updateTugas/:id', tugasController.updateTugas)
+
+
+
 
 
 module.exports = router;

@@ -60,7 +60,7 @@ class DosenController {
     async createDosen(req, res) {
     const { dosenName, matkulId } = req.body;
     try {
-      const existingName = await prisma.dosen.findUnique({
+      const existingName = await prisma.dosen. q({
         where: {
           dosenName: dosenName,
         },
