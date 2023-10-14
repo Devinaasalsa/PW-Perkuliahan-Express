@@ -45,8 +45,8 @@ class MahasiswaController {
       });
 
       if (existingNim) {
-        return res.json({
-          error: "Nim telah terdaftar",
+        return res.status(500).json({
+          error: "Gagal mendaftarkan mahasiswa, NIM telah terdaftar",
         });
       }
       const newMahasiswa = { mhsName, nim };

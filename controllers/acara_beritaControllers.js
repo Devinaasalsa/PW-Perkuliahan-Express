@@ -23,7 +23,7 @@ class AcaraBeritaController {
                     id: parseInt(id)
                 },
             })
-            if (!acaraBerita) {
+            if (!acaraBeritas) {
                 return res.json(400).json({ error: "Acara berita tidak di temukan" })
             }
             res.json(acaraBeritas)
@@ -36,20 +36,6 @@ class AcaraBeritaController {
     async createAcaraBerita(req, res) {
         const { date, jamMasuk, jamKeluar, descMateri } = req.body
         try {
-            
-            // const exitingAcaraBerita = await prisma.acaraBerita.findFirst({
-            //     where: {
-            //         date: new Date(date),
-            //     },
-            // });
-            // console.log(exitingAcaraBerita);
-
-            // if (exitingAcaraBerita) {
-            //     return res.json({
-            //         error: "Tanggal tersebut sudah di isi"
-            //     })
-            // }
-
             const newAcaraBerita = { date, jamMasuk, jamKeluar, descMateri }
             const acaraBeritas = await prisma.acaraBerita.create({
                 data: {
@@ -98,7 +84,7 @@ class AcaraBeritaController {
             });
         
             // Lanjutkan dengan respons atau tindakan lain setelah penghapusan berhasil
-            res.json({ message: "Data acaraBerita berhasil dihapus" });
+            res.json({ message: "Data acara berita berhasil dihapus" });
         } catch (error) {
             console.error("Terjadi kesalahan saat menghapus data acaraBerita", error);
             res.status(500).json({ error: "Terjadi kesalahan saat menghapus data acaraBerita" });

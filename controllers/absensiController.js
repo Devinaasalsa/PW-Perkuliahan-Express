@@ -2,6 +2,8 @@ const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 
 class AbsensiController{
+
+  //input absensi harus berupa objek
   async inputAbsensi(req, res) {
     const absensiData = req.body; // Menerima array objek absensi
   
@@ -38,10 +40,10 @@ class AbsensiController{
   
       res.json(createdAbsensi);
     } catch (error) {
-      console.error("Terjadi kesalahan saat mendaftarkan Mahasiswa", error);
+      console.error("Terjadi kesalahan saat menginput absensi", error);
       res
         .status(500)
-        .json({ error: "Terjadi kesalahan saat mendaftarkan Mahasiswa" });
+        .json({ error: "Terjadi kesalahan saat menginput absensi" });
     }
   }
   

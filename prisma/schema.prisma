@@ -12,13 +12,37 @@ datasource db {
 
 // admin models
 
+model User {
+  id       Int    @id @default(autoincrement())
+  username String
+  password String
+  roleId   Int?
+  role     Role?  @relation(fields: [roleId], references: [id])
+
+  dosenId   Int?
+  dosen     Dosen?   @relation(fields: [dosenId], references: [id])
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  roleName  String @unique
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+
+  User User[]
+}
+
 model Dosen {
   id        Int      @id @default(autoincrement())
+  nip       Int @unique
   dosenName String   @unique
   matkulId  Int
   matkul    Matkul   @relation(fields: [matkulId], references: [id])
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
+  User      User[]
 }
 
 model Matkul {
@@ -34,7 +58,7 @@ model Matkul {
 
 model Mahasiswa {
   id        Int       @id @default(autoincrement())
-  mhsName   String    @unique
+  mhsName   String    
   nim       Int       @unique
   absensi   Absensi[]
 
@@ -61,30 +85,30 @@ model Absensi {
   mahasiswaId Int
   mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
 
-  statusId Int
+  statusId   Int
   totalHadir Int
-  
+
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
 
 model Status {
-  id Int @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   statusName String
 }
 
-model Tugas {
-  id Int @id @default(autoincrement())
-  judul     String
-  namaDosen String
-  deskripsi String
-  lampiran  String
-  point     Int
-  dueDate   DateTime
-  topik     String
+model NilaiAkhir {
+    id         Int    @id @default(autoincrement())
+  totalAbsen Int 
+  nilaiTugas Float
+  uts Float
+  uas Float
+  absenPercent Float
+  tugasPercent Float
+  utsPercent Float
+  uasPercent Float
+  angkaMutu Float
+  hurufMutu String
+  ket String
 
-  
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt()
 }
-

@@ -58,38 +58,69 @@ class DosenController {
     }
 
     async createDosen(req, res) {
-    const { dosenName, matkulId } = req.body;
-    try {
-      const existingName = await prisma.dosen. q({
-        where: {
-          dosenName: dosenName,
-        },
-      });
-
-      if (existingName) {
-        return res.json({
-          error: "Dosen telah terdaftar",
-        });
-      }
-      const dosens = await prisma.dosen.create({
-        data: {
-          dosenName: dosenName,
-          matkul: {
-            connect: {
-                id: matkulId
-            }
+        const { dosenName, matkulId, nip } = req.body;
+        try {
+          const existingNip = await prisma.dosen.findUnique({
+            where: {
+              nip: nip,
+            },
+          });
+      
+          if (existingNip) {
+            return res.status(500).json({
+              error: "Tidak dapat mendaftar dosen, nip telah terdaftar",
+            });
           }
-        },
-        },
-      );
-      res.json(dosens);
-    } catch (error) {
-      console.error("Terjadi kesalahan saat menambahkan data Dosen", error);
-      res
-        .status(500)
-        .json({ error: "Terjadi kesalahan saat menambahkan data Dosen" });
-    }
-}
+
+          const existingDosen = await prisma.dosen.findUnique({
+            where: {
+              dosenName: dosenName,
+            },
+          });
+      
+          if (existingDosen) {
+            return res.status(500).json({
+              error: "Tidak dapat mendaftar dosen, nama dosen telah terdaftar",
+            });
+          }
+      
+          // Buat dosen
+          const dosen = await prisma.dosen.create({
+            data: {
+              dosenName,
+              nip,
+              matkul: {
+                connect: {
+                  id: matkulId
+                }
+              }
+            },
+          });
+      
+          // Buat user
+          const user = await prisma.user.create({
+            data: {
+              username: dosenName,
+              password: "123",         
+              role: {
+                connect: {
+                  id: 2
+                }
+              },
+              dosen: {
+                connect: {
+                  id: dosen.id
+                }
+              }
+            },
+          });
+      
+          res.json(dosen);
+        } catch (error) {
+          console.error("Terjadi kesalahan saat menambahkan data Dosen", error);
+          res.status(500).json({ error: "Terjadi kesalahan saat menambahkan data Dosen" });
+        }
+      }
     async updateDosen(req, res){
         const { dosenName } = req.body;
         const { id } = req.params;
