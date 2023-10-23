@@ -6,6 +6,7 @@ const AcaraBeritaController = require('../controllers/acara_beritaControllers.js
 const AbsensiController = require('../controllers/absensiController.js')
 const RoleController = require('../controllers/roleController.js')
 const TugasController = require('../controllers/tugasController.js')
+const LoginController = require('../controllers/loginController.js')
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -13,6 +14,9 @@ const matkulController = new MatkulController();
 const dosenController = new DosenController();
 const acaraBeritaController = new AcaraBeritaController();
 const absensiController = new AbsensiController();
+const roleController = new RoleController()
+const tugasController = new TugasController()
+const loginController = new LoginController()
 
 // routes mahasiswa
 router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
@@ -56,6 +60,8 @@ router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
 router.post('/createTugas', tugasController.createTugas)
 router.put('/updateTugas/:id', tugasController.updateTugas)
+
+router.post('/login', loginController.getMahasiswaById)
 
 
 
