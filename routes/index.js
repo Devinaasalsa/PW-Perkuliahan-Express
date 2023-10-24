@@ -5,6 +5,7 @@ const DosenController = require('../controllers/dosenController.js');
 const AcaraBeritaController = require('../controllers/acara_beritaControllers.js')
 const AbsensiController = require('../controllers/absensiController.js')
 const RoleController = require('../controllers/roleController.js')
+const NilaiController = require('../controllers/nilaiController.js')
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -13,6 +14,7 @@ const dosenController = new DosenController();
 const acaraBeritaController = new AcaraBeritaController();
 const absensiController = new AbsensiController();
 const roleController = new RoleController();
+const nilaiController = new NilaiController();
 
 // routes mahasiswa
 router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
@@ -52,5 +54,7 @@ router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
 router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
 router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)
 
+//route nilai
+router.post('/inputAllNilai', nilaiController.inputNilai)
 
 module.exports = router;

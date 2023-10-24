@@ -86,7 +86,7 @@ model Absensi {
   mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
 
   statusId   Int
-  totalHadir Int
+  totalHadir Int 
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
@@ -98,7 +98,7 @@ model Status {
 }
 
 model NilaiAkhir {
-    id         Int    @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   totalAbsen Int 
   nilaiTugas Float
   uts Float
