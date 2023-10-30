@@ -102,11 +102,7 @@ class DosenController {
             data: {
               username: dosenName,
               password: "123",         
-              role: {
-                connect: {
-                  id: 2
-                }
-              },
+              roleId: 2,
               dosen: {
                 connect: {
                   id: dosen.id

@@ -16,8 +16,8 @@ model User {
   id       Int    @id @default(autoincrement())
   username String
   password String
-  roleId   Int?
-  role     Role?  @relation(fields: [roleId], references: [id])
+  roleId   Int
+  role     Role  @relation(fields: [roleId], references: [id])
 
   dosenId   Int?
   dosen     Dosen?   @relation(fields: [dosenId], references: [id])
@@ -59,7 +59,7 @@ model Matkul {
 model Mahasiswa {
   id        Int       @id @default(autoincrement())
   mhsName   String    
-  nim       Int       @unique
+  nim       String       @unique
   absensi   Absensi[]
 
   createdAt DateTime  @default(now())
@@ -111,4 +111,26 @@ model NilaiAkhir {
   hurufMutu String
   ket String
 
+}
+
+model Tugas {
+  id Int @id @default(autoincrement())
+  judul     String
+  namaDosen String
+  deskripsi String
+  lampiran  String
+  point     Int
+  dueDate   DateTime
+  topik     String
+  statusTugas StatusTugas @relation(fields: [statusTugasId], references: [id])
+  statusTugasId Int 
+  
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+}
+
+model StatusTugas {
+  id Int @id @default(autoincrement())
+  statusTugas String
+  tugas     Tugas[] // Menambahkan relasi dari StatusTugas ke Tugas
 }

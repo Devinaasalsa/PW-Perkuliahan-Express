@@ -17,27 +17,46 @@ class NilaiController {
       }
     }
 
-    async sumNilai(req, res){
-        
-    }
-
-    async inputNilai(req, res) {
-  const { totalAbsen, nilaiTugas, uts, uas, absenPercent, tugasPercent, utsPercent, uasPercent, angkaMutu, hurufMutu,ket } = req.body;
-  try {
-    const newNilai = {totalAbsen, nilaiTugas, uts, uas, absenPercent, tugasPercent, utsPercent, uasPercent, angkaMutu, hurufMutu,ket};
-    const nilaiAkhir = await prisma.nilaiAkhir.create({
-      data: {
-        ...newNilai,
-      },
-    });
-    res.json(nilaiAkhir);
-  } catch (error) {
-    console.error("Terjadi kesalahan saat menginput Nilai", error);
-    res
-      .status(500)
-      .json({ error: "Terjadi kesalahan saat menginput Nilai" });
-  }
-    }
+    async sumNilai(req, res) {
+        try {
+          const { totalAbsen, nilaiTugas, uts, uas } = req.body;
+      
+          // Menghitung nilai berdasarkan bobot
+          const absenPercent = (totalAbsen / 100) * 20;
+          const tugasPercent = (nilaiTugas / 100) * 30;
+          const utsPercent = (uts / 100) * 20;
+          const uasPercent = (uas / 100) * 30;
+      
+          // Menghitung total nilai
+          const angkaMutu = absenPercent + tugasPercent + utsPercent + uasPercent;
+      
+          let hurufMutu, ket;
+      
+          // Tentukan huruf mutu dan keterangan berdasarkan angka mutu
+          if (angkaMutu >= 80) {
+            hurufMutu = 'A';
+            ket = 'Sangat Baik';
+          } else if (angkaMutu >= 70) {
+            hurufMutu = 'B';
+            ket = 'Baik';
+          } else if (angkaMutu >= 60) {
+            hurufMutu = 'C';
+            ket = 'Cukup';
+          } else if (angkaMutu >= 50) {
+            hurufMutu = 'D';
+            ket = 'Kurang';
+          } else {
+            hurufMutu = 'E';
+            ket = 'Sangat Kurang';
+          }
+      
+          res.status(200).json({ totalAbsen, nilaiTugas, uts, uas, absenPercent, tugasPercent, utsPercent, uasPercent, angkaMutu, hurufMutu, ket });
+        } catch (error) {
+          console.error("Terjadi kesalahan saat menghitung nilai", error);
+          res.status(500).json({ error: "Terjadi kesalahan saat menghitung nilai" });
+        }
+      }
+      
 
     async getMahasiswaById(req, res) {
         const {id} = req.params;
