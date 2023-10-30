@@ -77,6 +77,20 @@ model AcaraBerita {
 
 }
 
+model Tugas {
+  id Int @id @default(autoincrement())
+  judul     String
+  namaDosen String
+  deskripsi String
+  lampiran  String
+  point     Int
+  dueDate   DateTime
+  topik     String
+  
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+}
+
 
 
 model Absensi {

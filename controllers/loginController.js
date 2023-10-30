@@ -29,7 +29,6 @@ class LoginController {
             
             res.json({ token });
         } catch (error) {
-            // Handle error, misalnya dengan mengirim respons 500 jika terjadi kesalahan internal.
             res.status(500).json({ message: 'Terjadi kesalahan internal' });
             console.log(error)
         }

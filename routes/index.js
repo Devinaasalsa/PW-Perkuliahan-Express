@@ -18,8 +18,16 @@ const roleController = new RoleController()
 const tugasController = new TugasController()
 const loginController = new LoginController()
 
-// routes mahasiswa
-router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
+function isMahasiswa(req, res, next) {
+    if (req.mahasiwa === 'mahasiswa') {
+      next(); // Lanjutkan ke rute berikutnya jika rolenya adalah mahasiswa
+    } else {
+      res.status(403).send('Anda tidak memiliki akses sebagai mahasiswa.');
+    }
+  }
+
+
+router.get('/getMahasiswa',  isMahasiswa, mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
 router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
 router.patch('/updateMahasiswa/:id', mahasiswaController.updateMahasiswa);
