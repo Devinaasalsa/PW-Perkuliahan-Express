@@ -8,31 +8,38 @@ const jwt = require('jsonwebtoken');
 
 
 class LoginController {
-    async getMahasiswaById(req, res) {
-        try {
-            const { mhsName, nim } = req.body;
+    async LoginMahasiswa(req, res) {
+        const { username, password } = req.body;
 
-            const user = await prisma.mahasiswa.findFirst({
-                where: { mhsName }
-            });
+  try {
+    // Cari pengguna berdasarkan mhsName
+    const user = await prisma.user.findFirst({ where: { username } });
 
-            if (!user) {
-                return res.status(401).json({ message: "Nama mahasiswa tidak ditemukan" });
-            }
-            
-            const nimMatch =  bcrypt.compare(nim, String(user.nim));
-            if (!nimMatch) {
-                return res.status(401).json({ message: 'Password salah' });
-            }
+    if (!user) {
+      return res.status(401).json({ error: "Kesalahan Kredensial" });
+    }
 
-            const token = jwt.sign({ nimId: user.id }, 'secret-key', { expiresIn: '1h' });
-            
-            res.json({ token });
+    // Verifikasi password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Kesalahan Kredensial" });
+    }
+
+    // Buat token JWT
+    const token = jwt.sign({ userId: user.id }, "secret_key");
+
+    res.json({
+      statuscode: 200,
+      token,
+      //user
+    });
         } catch (error) {
             res.status(500).json({ message: 'Terjadi kesalahan internal' });
-            console.log(error)
+            console.log(error);
         }
     }
+    
 }
 
 module.exports = LoginController;

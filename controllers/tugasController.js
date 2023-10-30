@@ -36,7 +36,7 @@ class TugasController {
     }
 
     async createTugas(req, res) {
-        const { judul, namaDosen, deskripsi, image, point, dueDate, topik } = req.body      
+        const { judul, namaDosen, deskripsi, image, dueDate, topik } = req.body      
         console.log(image)
         console.log(req.files)
         try {
@@ -58,19 +58,17 @@ class TugasController {
             //     })
             // }
 
-            const newTugas = {
-                judul,
-                namaDosen,
-                deskripsi,
-                lampiran: req.files[0].filename,
-                point: parseInt(point),
-                dueDate: new Date(dueDate).toISOString(),
-                topik
-              };
             const tugass = await prisma.tugas.create({
                 data: {
-                    ...newTugas,
-                },
+                    judul,
+                    namaDosen,
+                    deskripsi,
+                    lampiran: req.files[0].filename,
+                    point: 0,
+                    dueDate: new Date(dueDate).toISOString(),
+                    topik,
+                    statusTugasId: 1
+                  },
             })
             res.json(tugass)
         } catch (error) {
@@ -80,8 +78,6 @@ class TugasController {
                 .status(500)
                 .json({ error: "Terjadi kesalahaan saat menambahkan tugas" })
         }
-
-        
     }
 
     async updateTugas(req, res) {
@@ -104,10 +100,29 @@ class TugasController {
             res.status(500).json({ error: "Terjadi keselahan saat update data tugas" })
         }
     }
+
+    async updateNilaiTugas(req, res) {
+        const { point } = req.body
+        const { id } = req.params
+        try {
+            const tugass = await prisma.tugas.update({
+                where: { id: parseInt(id) },
+                data: {
+                    point: parseInt(point),
+                    statusTugasId: 2
+                }
+            })
+            res.status(200).json(tugass)
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: "Terjadi keselahan saat update data tugas" })
+        }
+    }
     
-    // async updateTugas(req, res) {
-    //     const
-    // }
+    async kumpulkanTugas(req, res) {
+
+    }
+    
 }
 
 module.exports = TugasController;

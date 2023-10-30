@@ -2,6 +2,7 @@
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
+const bcrypt = require('bcrypt')
 
 
 class MahasiswaController {
@@ -55,6 +56,16 @@ class MahasiswaController {
           ...newMahasiswa,
         },
       });
+
+      const hashedPassword = await bcrypt.hash(nim, 10); // You can adjust the salt rounds as needed
+
+      const users = await prisma.user.create({
+        data: {
+          username: mhsName,
+          password: hashedPassword,
+          roleId: 3
+        }
+      })
       res.json(mahasiswas);
     } catch (error) {
       console.error("Terjadi kesalahan saat mendaftarkan Mahasiswa", error);
