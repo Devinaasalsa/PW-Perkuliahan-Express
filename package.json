@@ -5,6 +5,9 @@
   "scripts": {
     "start": "nodemon ./bin/www"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seeder/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "bcrypt": "^5.1.1",
@@ -20,5 +23,10 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "prisma": "^5.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }

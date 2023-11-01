@@ -103,11 +103,12 @@ class DosenController {
               username: dosenName,
               password: "123",         
               roleId: 2,
-              dosen: {
-                connect: {
-                  id: dosen.id
-                }
-              }
+              // dosen: {
+              //   connect: {
+              //     id: dosen.id
+              //   }
+              // }
+              dosenId: dosen.id
             },
           });
       

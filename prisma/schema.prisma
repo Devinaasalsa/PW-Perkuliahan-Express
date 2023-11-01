@@ -17,7 +17,10 @@ model User {
   username String
   password String
   roleId   Int
-  role     Role  @relation(fields: [roleId], references: [id])
+  role     Role   @relation(fields: [roleId], references: [id])
+
+  mhsId     Int?
+  mahasiswa Mahasiswa? @relation(fields: [mhsId], references: [id])
 
   dosenId   Int?
   dosen     Dosen?   @relation(fields: [dosenId], references: [id])
@@ -27,7 +30,7 @@ model User {
 
 model Role {
   id        Int      @id @default(autoincrement())
-  roleName  String @unique
+  roleName  String   @unique
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 
@@ -36,7 +39,7 @@ model Role {
 
 model Dosen {
   id        Int      @id @default(autoincrement())
-  nip       Int @unique
+  nip       String      @unique
   dosenName String   @unique
   matkulId  Int
   matkul    Matkul   @relation(fields: [matkulId], references: [id])
@@ -57,27 +60,25 @@ model Matkul {
 }
 
 model Mahasiswa {
-  id        Int       @id @default(autoincrement())
-  mhsName   String    
-  nim       String       @unique
-  absensi   Absensi[]
+  id      Int       @id @default(autoincrement())
+  mhsName String
+  nim     String    @unique
+  absensi Absensi[]
 
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt()
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+  User      User[]
 }
 
 model AcaraBerita {
-  id          Int       @id @default(autoincrement())
-  date        DateTime
-  jamMasuk    Int
-  jamKeluar   Int 
-  descMateri  String
-  createdAt   DateTime  @default(now())
-  updateAt    DateTime  @updatedAt()
-
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  jamMasuk   Int
+  jamKeluar  Int
+  descMateri String
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt()
 }
-
-
 
 model Absensi {
   id Int @id @default(autoincrement())
@@ -86,7 +87,7 @@ model Absensi {
   mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
 
   statusId   Int
-  totalHadir Int 
+  totalHadir Int
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
@@ -98,39 +99,38 @@ model Status {
 }
 
 model NilaiAkhir {
-  id         Int    @id @default(autoincrement())
-  totalAbsen Int 
-  nilaiTugas Float
-  uts Float
-  uas Float
+  id           Int    @id @default(autoincrement())
+  totalAbsen   Int
+  nilaiTugas   Float
+  uts          Float
+  uas          Float
   absenPercent Float
   tugasPercent Float
-  utsPercent Float
-  uasPercent Float
-  angkaMutu Float
-  hurufMutu String
-  ket String
-
+  utsPercent   Float
+  uasPercent   Float
+  angkaMutu    Float
+  hurufMutu    String
+  ket          String
 }
 
 model Tugas {
-  id Int @id @default(autoincrement())
-  judul     String
-  namaDosen String
-  deskripsi String
-  lampiran  String
-  point     Int
-  dueDate   DateTime
-  topik     String
-  statusTugas StatusTugas @relation(fields: [statusTugasId], references: [id])
-  statusTugasId Int 
-  
+  id            Int         @id @default(autoincrement())
+  judul         String
+  namaDosen     String
+  deskripsi     String
+  lampiran      String
+  point         Int
+  dueDate       DateTime
+  topik         String
+  statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
+  statusTugasId Int
+
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
 
 model StatusTugas {
-  id Int @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   statusTugas String
-  tugas     Tugas[] // Menambahkan relasi dari StatusTugas ke Tugas
+  tugas       Tugas[] // Menambahkan relasi dari StatusTugas ke Tugas
 }
