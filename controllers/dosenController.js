@@ -111,6 +111,12 @@ class DosenController {
                   id: 1
                 }
               }
+              // dosen: {
+              //   connect: {
+              //     id: dosen.id
+              //   }
+              // }
+              dosenId: dosen.id
             },
           });
 
