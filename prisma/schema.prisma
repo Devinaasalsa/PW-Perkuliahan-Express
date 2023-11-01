@@ -80,10 +80,6 @@ model AcaraBerita {
   updateAt   DateTime @updatedAt()
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 4e8b692ad9107012b88dc97f7954ae29f68e43f0
 model Absensi {
   id Int @id @default(autoincrement())
 
