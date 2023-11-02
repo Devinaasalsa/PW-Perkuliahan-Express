@@ -106,17 +106,7 @@ class DosenController {
               username: dosenName,
               password: nip,
               roleId: 2,
-              dosen: {
-                connect: {
-                  id: 1
-                }
-              }
-              // dosen: {
-              //   connect: {
-              //     id: dosen.id
-              //   }
-              // }
-              // dosenId: dosen.id
+              dosenId: dosen.id
             },
           });
 
