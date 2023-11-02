@@ -10,6 +10,7 @@ const TugasController = require('../controllers/tugasController.js')
 const LoginController = require('../controllers/loginController.js')
 // const LoginDosenController = require('../controllers/loginController.js')
 
+
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
 const matkulController = new MatkulController();
@@ -83,6 +84,7 @@ router.get('/getTugas', isDosen, tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
 router.post('/createTugas', tugasController.createTugas)
 router.put('/updateTugas/:id', tugasController.updateTugas)
+router.put('/kumpulkanTugas/:id', tugasController.kumpulkanTugas)
 
 router.post('/login', loginController.LoginMahasiswa)
 router.post('/loginDosen', loginController.LoginDosen)

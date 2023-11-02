@@ -1,26 +1,18 @@
-const upload = async (req, res) => {
-    try {
-      await uploadFile(req, res);
-  
-      if (req.file == undefined) {
-        return res.status(400).send({ message: "Please upload a file!" });
-      }
-  
-      res.status(200).send({
-        message: "Uploaded the file successfully: " + req.file.originalname,
-      });
-    } catch (err) {
-      console.log(err);
-  
-      if (err.code == "LIMIT_FILE_SIZE") {
-        return res.status(500).send({
-          message: "File size cannot be larger than 2MB!",
-        });
-      }
-  
-      res.status(500).send({
-        message: `Could not upload the file: ${req.file.originalname}. ${err}`,
-      });
-    }
-  };
-  
+const multer = require('multer');
+
+// Konfigurasi penyimpanan (storage) untuk multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Tentukan direktori tempat berkas akan disimpan
+    cb(null, 'uploads/'); // Sesuaikan dengan direktori yang Anda inginkan
+  },
+  filename: (req, file, cb) => {
+    // Tentukan nama berkas yang akan disimpan
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+// Inisialisasi multer dengan konfigurasi storage
+const upload = multer({ storage: storage });
+
+module.exports = upload;
