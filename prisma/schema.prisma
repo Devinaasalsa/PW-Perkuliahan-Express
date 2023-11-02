@@ -122,8 +122,10 @@ model Tugas {
   point         Int
   dueDate       DateTime
   topik         String
-  statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
   statusTugasId Int
+  statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
+
+  tugasSiswa String?
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()

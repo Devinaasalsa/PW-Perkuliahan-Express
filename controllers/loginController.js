@@ -16,15 +16,14 @@ class LoginController {
     const user = await prisma.user.findFirst({ where: { username } });
 
     if (!user) {
-      return res.status(401).json({ error: "Kesalahan Kredensial user not found" });
+      return res.status(401).json({ error: "Kesalahan Kredensial, user tidak ditemukan" });
     }
 
     // Verifikasi password
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: "Kesalahan Kredensial, password not match" });
-  
+      return res.status(401).json({ error: "Kesalahan Kredensial, password tidak sesuai" });
     }
 
     // Buat token JWT
@@ -40,7 +39,41 @@ class LoginController {
             console.log(error);
         }
     }
-    
+
+    async LoginDosen(req, res) {
+      const { username, password } = req.body;
+  
+  try {
+  // Cari pengguna berdasarkan mhsName
+  const user = await prisma.user.findFirst({ where: { username } });
+  
+  if (!user) {
+    return res.status(401).json({ error: "Kesalahan Kredensial user not found" });
+  }
+  
+  // Verifikasi password
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  
+  if (!passwordMatch) {
+    return res.status(401).json({ error: "Kesalahan Kredensial, password not match" });
+  
+  }
+  
+  // Buat token JWT
+  const token = jwt.sign({ userId: user.id }, "secret_key");
+  
+  res.json({
+    statuscode: 200,
+    token,
+    //user
+  });
+      } catch (error) {
+          res.status(500).json({ message: 'Terjadi kesalahan internal' });
+          console.log(error);
+      }
+  }
 }
+
+
 
 module.exports = LoginController;
