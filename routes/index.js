@@ -85,6 +85,8 @@ router.put('/updateTugas/:id', tugasController.updateTugas)
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
 
+//logout
+
 
 
 
