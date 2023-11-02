@@ -35,6 +35,7 @@ class TugasController {
         }
     }
 
+    //for dosen
     async createTugas(req, res) {
         const { judul, namaDosen, deskripsi, image, dueDate, topik } = req.body      
         console.log(image)
@@ -84,13 +85,22 @@ class TugasController {
         const { judul, namaDosen, deskripsi, image, point, dueDate, topik } = req.body
         const { id } = req.params
         try {
+            const findTugas = await prisma.tugas.findFirst({
+                where: {
+                  id: parseInt(id),
+                },
+              });
+          
+              if (!findTugas) {
+                return res.status(400).json({ error: "Tugas tidak ditemukan" }); // Perbaiki res.status(400)
+              }
             const tugass = await prisma.tugas.update({
                 where: { id: parseInt(id) },
                 data: {judul,
                     namaDosen,
                     deskripsi,
                     lampiran: req.files[0].filename,
-                    point: parseInt(point),
+                    point: 0,
                     dueDate: new Date(dueDate).toISOString(),
                     topik}
             })
@@ -119,9 +129,39 @@ class TugasController {
         }
     }
     
-    async kumpulkanTugas(req, res) {
 
+    //for mahasiswa
+    async kumpulkanTugas(req, res) {
+        const {image } = req.body;
+        const { id } = req.params
+
+    
+        try {
+            const existingTugas = await prisma.tugas.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+    
+            if (!existingTugas) {
+                return res.status(400).json({ error: "Tugas tidak ditemukan" }); // Perbaiki res.status(400)
+              }
+    
+            const tugass = await prisma.tugas.update({
+                where: { id: parseInt(id) },
+                data: {
+                    tugasSiswa: req.files[0].filename,
+                }
+            })
+            res.status(200).json(tugass)
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: "Terjadi keselahan saat mengumpulkan tugas" })
+        }
     }
+
+    
+    
     
 }
 

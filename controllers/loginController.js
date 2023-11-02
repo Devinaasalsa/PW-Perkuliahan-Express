@@ -16,14 +16,14 @@ class LoginController {
     const user = await prisma.user.findFirst({ where: { username } });
 
     if (!user) {
-      return res.status(401).json({ error: "Kesalahan Kredensial" });
+      return res.status(401).json({ error: "Kesalahan Kredensial, user tidak ditemukan" });
     }
 
     // Verifikasi password
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: "Kesalahan Kredensial" });
+      return res.status(401).json({ error: "Kesalahan Kredensial, password tidak sesuai" });
     }
 
     // Buat token JWT
