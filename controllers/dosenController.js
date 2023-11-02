@@ -1,6 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
+const bcrypt = require('bcrypt')
+
 
 
 class DosenController {
@@ -97,21 +99,28 @@ class DosenController {
             },
           });
       
+
           // Buat user
           const user = await prisma.user.create({
             data: {
               username: dosenName,
-              password: "123",         
+              password: nip,
               roleId: 2,
+              dosen: {
+                connect: {
+                  id: 1
+                }
+              }
               // dosen: {
               //   connect: {
               //     id: dosen.id
               //   }
               // }
-              dosenId: dosen.id
+              // dosenId: dosen.id
             },
           });
-      
+
+
           res.json(dosen);
         } catch (error) {
           console.error("Terjadi kesalahan saat menambahkan data Dosen", error);

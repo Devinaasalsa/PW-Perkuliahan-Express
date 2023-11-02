@@ -1,8 +1,8 @@
-const { PrismaClient } = require("@prisma/client")
+const { PrismaClient } = require('@prisma/client');
 
 const path = require('path');
 
-const prisma = new PrismaClient
+const prisma = new PrismaClient();
 
 class TugasController {
     async getAllTugas(req, res) {
