@@ -105,18 +105,9 @@ class DosenController {
           const user = await prisma.user.create({
             data: {
               username: dosenName,
-              password: "123",         
+              password: hashedPassword,         
               roleId: 2,
-              // dosen: {
-              //   connect: {
-              //     id: dosen.id
-              //   }
-              // },
-              // dosen: {
-              //   connect: {
-              //     id: dosen.id
-              //   }
-              // }
+    
               dosenId: dosen.id
             },
           });

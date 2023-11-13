@@ -13,7 +13,7 @@ class LoginController {
 
   try {
     // Cari pengguna berdasarkan mhsName
-    const user = await prisma.user.findFirst({ where: { username } });
+    const user = await prisma.user.findFirst({ where: { username }, include: { role: true } });
 
     if (!user) {
       return res.status(401).json({ error: "Kesalahan Kredensial, user tidak ditemukan" });
@@ -25,9 +25,9 @@ class LoginController {
     if (!passwordMatch) {
       return res.status(401).json({ error: "Kesalahan Kredensial, password tidak sesuai" });
     }
-
+    // return console.log(user);
     // Buat token JWT
-    const token = jwt.sign({ userId: user.id }, "secret_key");
+    const token = jwt.sign({ userId: user.id, role: user.role.roleName }, "secret_key");
 
     res.json({
       statuscode: 200,
@@ -45,7 +45,7 @@ class LoginController {
   
   try {
   // Cari pengguna berdasarkan mhsName
-  const user = await prisma.user.findFirst({ where: { username } });
+  const user = await prisma.user.findFirst({ where: { username }, include: { role: true } });
   
   if (!user) {
     return res.status(401).json({ error: "Kesalahan Kredensial user not found" });
@@ -57,10 +57,10 @@ class LoginController {
   if (!passwordMatch) {
     return res.status(401).json({ error: "Kesalahan Kredensial, password not match" });
   
-  }
-  
+    }
+    
   // Buat token JWT
-  const token = jwt.sign({ userId: user.id }, "secret_key");
+  const token = jwt.sign({ userId: user.id, role: user.role.roleName }, "secret_key");
   
   res.json({
     statuscode: 200,
