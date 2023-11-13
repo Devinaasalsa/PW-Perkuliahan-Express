@@ -38,14 +38,17 @@ model Role {
 }
 
 model Dosen {
-  id        Int      @id @default(autoincrement())
-  nip       String      @unique
-  dosenName String   @unique
-  matkulId  Int
-  matkul    Matkul   @relation(fields: [matkulId], references: [id])
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt()
-  User      User[]
+  id          Int           @id @default(autoincrement())
+  nip         String        @unique
+  dosenName   String        @unique
+  matkulId    Int
+  matkul      Matkul        @relation(fields: [matkulId], references: [id])
+  createdAt   DateTime      @default(now())
+  updateAt    DateTime      @updatedAt()
+  User        User[]
+  Tugas       Tugas[]
+  tugasId     Int?
+  AcaraBerita AcaraBerita[]
 }
 
 model Matkul {
@@ -65,19 +68,23 @@ model Mahasiswa {
   nim     String    @unique
   absensi Absensi[]
 
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt()
-  User      User[]
+  createdAt  DateTime     @default(now())
+  updateAt   DateTime     @updatedAt()
+  User       User[]
+  NilaiAkhir NilaiAkhir?
 }
 
 model AcaraBerita {
-  id         Int      @id @default(autoincrement())
-  date       DateTime
-  jamMasuk   Int
-  jamKeluar  Int
-  descMateri String
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt()
+  id          Int      @id @default(autoincrement())
+  dosenId     Int
+  pertemuanKe Int
+  dosen       Dosen    @relation(fields: [dosenId], references: [id])
+  date        DateTime
+  jamMasuk    Int
+  jamKeluar   Int
+  descMateri  String
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt()
 }
 
 model Absensi {
@@ -93,14 +100,19 @@ model Absensi {
   updateAt  DateTime @updatedAt()
 }
 
-model Status {
-  id         Int    @id @default(autoincrement())
-  statusName String
+model StatusAbsen {
+  id          Int      @id @default(autoincrement())
+  statusAbsen String
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt()
 }
 
 model NilaiAkhir {
-  id           Int    @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
+  mhsId        Int @unique
+  mahasiswa    Mahasiswa @relation(fields: [mhsId], references: [id])
   totalAbsen   Int
+  
   nilaiTugas   Float
   uts          Float
   uas          Float
@@ -116,7 +128,8 @@ model NilaiAkhir {
 model Tugas {
   id            Int         @id @default(autoincrement())
   judul         String
-  namaDosen     String
+  dosenId       Int
+  dosen         Dosen       @relation(fields: [dosenId], references: [id])
   deskripsi     String
   lampiran      String
   point         Int
@@ -134,5 +147,5 @@ model Tugas {
 model StatusTugas {
   id          Int     @id @default(autoincrement())
   statusTugas String
-  tugas       Tugas[] // Menambahkan relasi dari StatusTugas ke Tugas
+  tugas       Tugas[]
 }

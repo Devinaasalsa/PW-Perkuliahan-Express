@@ -99,15 +99,14 @@ class DosenController {
             },
           });
       
-          const hashedPassword = await bcrypt.hash(nip, 10); // You can adjust the salt rounds as needed
 
           // Buat user
+          const hashedPassword = await bcrypt.hash(nip, 10); // You can adjust the salt rounds as needed
           const user = await prisma.user.create({
             data: {
               username: dosenName,
               password: hashedPassword,
               roleId: 2,
-              
               dosenId: dosen.id
             },
           });

@@ -6,7 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "prisma": {
-    "seed": "ts-node prisma/seeder/seed.ts"
+    "seed": "ts-node prisma/seeder/Allseed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",

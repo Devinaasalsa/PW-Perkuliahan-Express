@@ -37,9 +37,10 @@ class TugasController {
 
     //for dosen
     async createTugas(req, res) {
-        const { judul, namaDosen, deskripsi, image, dueDate, topik } = req.body      
+        const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } = req.body      
         console.log(image)
         console.log(req.files)
+
         try {
             if (!req.files || !req.files[0]) {
                 return res.status(400).json({
@@ -47,28 +48,25 @@ class TugasController {
                     message: "Tidak ada file Excel yang diunggah",
                 });
             }
-            // const exitingTugas = await prisma.tugas.findFirst({
-            //     where: {
-            //         judul: judul,
-            //     },
-            // })
-
-            // if (exitingTugas) {
-            //     return res.json({
-            //         error : "Tugas telah terdaftar",
-            //     })
-            // }
 
             const tugass = await prisma.tugas.create({
                 data: {
                     judul,
-                    namaDosen,
+                    dosen: {
+                        connect: {
+                            id: parseInt(dosenId)
+                        }
+                    },
                     deskripsi,
                     lampiran: req.files[0].filename,
                     point: 0,
                     dueDate: new Date(dueDate).toISOString(),
                     topik,
-                    statusTugasId: 1
+                    statusTugas: {
+                        connect: {
+                            id: 1
+                        }
+                    }
                   },
             })
             res.json(tugass)
@@ -82,7 +80,7 @@ class TugasController {
     }
 
     async updateTugas(req, res) {
-        const { judul, namaDosen, deskripsi, image, point, dueDate, topik } = req.body
+        const { judul, dosenId, deskripsi, image, point, dueDate, topik } = req.body
         const { id } = req.params
         try {
             const findTugas = await prisma.tugas.findFirst({
@@ -97,7 +95,7 @@ class TugasController {
             const tugass = await prisma.tugas.update({
                 where: { id: parseInt(id) },
                 data: {judul,
-                    namaDosen,
+                    dosenId,
                     deskripsi,
                     lampiran: req.files[0].filename,
                     point: 0,
