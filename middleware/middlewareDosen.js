@@ -22,7 +22,7 @@ class MiddlewareDosen {
         // Periksa role dengan benar
         next(); // Izinkan akses bagi pengguna dengan role 'Dosen'
       } else {
-        return res.status(403).json({ message: 'Anda tidak memiliki akses sebagai Dosen.' });
+        return res.status(403).json({ message: 'Anda tidak memiliki akses untuk halaman ini.' });
       }
     } catch (error) {
       return res.status(401).json({ message: 'Invalid token' });

@@ -41,7 +41,7 @@ const middlewareDosen = new MiddlewareDosen();
 // }
 
 
-router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
+router.get('/getMahasiswa', middlewareDosen.isDosen, mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
 router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
 router.patch('/updateMahasiswa/:id', mahasiswaController.updateMahasiswa);
