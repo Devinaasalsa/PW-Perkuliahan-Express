@@ -10,6 +10,7 @@ const TugasController = require('../controllers/tugasController.js')
 const LoginController = require('../controllers/loginController.js')
 const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
+const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -23,6 +24,7 @@ const tugasController = new TugasController()
 const loginController = new LoginController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
+const middlewareAdmin = new MiddlewareAdmin();
 
 // function isMahasiswa(req, res, next) {
 //   if (req.user && req.user.roleId === 'admin') {
@@ -67,7 +69,7 @@ router.post('/inputAbsen', absensiController.inputAbsensi);
 router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
 
 //routes role
-router.get('/getRole', roleController.getAllRole);
+router.get('/getRole', middlewareAdmin.isAdmin, roleController.getAllRole);
 router.get('/getRoleById/:id', roleController.getRoleById);
 router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
