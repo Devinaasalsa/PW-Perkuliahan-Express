@@ -24,22 +24,6 @@ const loginController = new LoginController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
 
-// function isMahasiswa(req, res, next) {
-//   if (req.user && req.user.roleId === 'admin') {
-//     next(); // Lanjutkan ke rute berikutnya jika rolenya adalah admin
-//   } else {
-//     res.status(403).send('Anda tidak memiliki akses sebagai admin.');
-//   }
-// }
-
-// function isDosen(req, res, next) {
-//   if (req.user && req.user.roleId === 'dosen') {
-//     next(); // Lanjutkan ke rute berikutnya jika rolenya adalah dosen
-//   } else {
-//     res.status(403).send('Anda tidak memiliki akses sebagai dosen.');
-//   }
-// }
-
 
 router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
@@ -83,8 +67,8 @@ router.post('/inputAllNilai', nilaiController.sumNilai)
 
 router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
-router.post('/createTugas', tugasController.createTugas)
-router.put('/updateTugas/:id', tugasController.updateTugas)
+router.post('/createTugas', middlewareDosen.isDosen,tugasController.createTugas)
+router.put('/updateTugas/:id', middlewareDosen.isDosen, tugasController.updateTugas)
 
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
