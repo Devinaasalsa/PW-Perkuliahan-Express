@@ -26,20 +26,21 @@ class TugasController {
                 },
             });
             if (!tugass) {
-                return jes.json(400).json({error: "Tugas tidak di temukan"})
+                return jes.json(400).json({ error: "Tugas tidak di temukan" })
             }
             res.json(tugass)
         } catch (error) {
             console.log(error)
-            res.status(500).json({error: "Terjadi kesalahan saat menampilkan data tugas "})
+            res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data tugas " })
         }
     }
 
     //for dosen
     async createTugas(req, res) {
-        const { judul, namaDosen, deskripsi, image, dueDate, topik } = req.body      
+        const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } = req.body
         console.log(image)
         console.log(req.files)
+
         try {
             if (!req.files || !req.files[0]) {
                 return res.status(400).json({
@@ -47,29 +48,26 @@ class TugasController {
                     message: "Tidak ada file Excel yang diunggah",
                 });
             }
-            // const exitingTugas = await prisma.tugas.findFirst({
-            //     where: {
-            //         judul: judul,
-            //     },
-            // })
-
-            // if (exitingTugas) {
-            //     return res.json({
-            //         error : "Tugas telah terdaftar",
-            //     })
-            // }
 
             const tugass = await prisma.tugas.create({
                 data: {
                     judul,
-                    namaDosen,
+                    dosen: {
+                        connect: {
+                            id: parseInt(dosenId)
+                        }
+                    },
                     deskripsi,
                     lampiran: req.files[0].filename,
                     point: 0,
                     dueDate: new Date(dueDate).toISOString(),
                     topik,
-                    statusTugasId: 1
-                  },
+                    statusTugas: {
+                        connect: {
+                            id: 1
+                        }
+                    }
+                },
             })
             res.json(tugass)
         } catch (error) {
@@ -82,27 +80,29 @@ class TugasController {
     }
 
     async updateTugas(req, res) {
-        const { judul, namaDosen, deskripsi, image, point, dueDate, topik } = req.body
+        const { judul, dosenId, deskripsi, image, point, dueDate, topik } = req.body
         const { id } = req.params
         try {
             const findTugas = await prisma.tugas.findFirst({
                 where: {
-                  id: parseInt(id),
+                    id: parseInt(id),
                 },
-              });
-          
-              if (!findTugas) {
+            });
+
+            if (!findTugas) {
                 return res.status(400).json({ error: "Tugas tidak ditemukan" }); // Perbaiki res.status(400)
-              }
+            }
             const tugass = await prisma.tugas.update({
                 where: { id: parseInt(id) },
-                data: {judul,
-                    namaDosen,
+                data: {
+                    judul,
+                    dosenId,
                     deskripsi,
                     lampiran: req.files[0].filename,
                     point: 0,
                     dueDate: new Date(dueDate).toISOString(),
-                    topik}
+                    topik
+                }
             })
             res.status(200).json(tugass)
         } catch (error) {
@@ -128,41 +128,76 @@ class TugasController {
             res.status(500).json({ error: "Terjadi keselahan saat update data tugas" })
         }
     }
-    
+
 
     //for mahasiswa
     async kumpulkanTugas(req, res) {
-        const {image } = req.body;
-        const { id } = req.params
+        const { id } = req.params;
 
-    
         try {
             const existingTugas = await prisma.tugas.findFirst({
                 where: {
                     id: parseInt(id),
                 },
             });
-    
+
             if (!existingTugas) {
-                return res.status(400).json({ error: "Tugas tidak ditemukan" }); // Perbaiki res.status(400)
-              }
-    
-            const tugass = await prisma.tugas.update({
+                return res.status(400).json({ error: "Tugas tidak ditemukan" });
+            }
+
+            // Update tugasSiswa
+            const updatedTugas = await prisma.tugas.update({
                 where: { id: parseInt(id) },
                 data: {
                     tugasSiswa: req.files[0].filename,
-                }
-            })
-            res.status(200).json(tugass)
+                },
+            });
+
+            // Check if dueDate has passed and tugasSiswa is still null, then update statusTugasId to 3
+            const currentDate = new Date();
+            const dueDate = new Date(existingTugas.dueDate);
+            console.log("Due Date:", dueDate);
+            console.log("Current Date:", currentDate);
+
+
+            if (dueDate < currentDate && updatedTugas.tugasSiswa === null) {
+                console.log("Updating Status to 3");
+                const overdueStatus = await prisma.tugas.update({
+                    where: { id: parseInt(id) },
+                    data: {
+                        statusTugasId: 3,
+                    },
+                });
+            } else if (updatedTugas.tugasSiswa !== null) {
+                console.log("Updating Status to 2");
+                const updatedStatus = await prisma.tugas.update({
+                    where: { id: parseInt(id) },
+                    data: {
+                        statusTugasId: 2,
+                    },
+                });
+            } else {
+                console.log("Updating Status to 1");
+                const nullStatus = await prisma.tugas.update({
+                    where: { id: parseInt(id) },
+                    data: {
+                        statusTugasId: 1,
+                    },
+                });
+            }
+
+
+            res.status(200).json(updatedTugas);
         } catch (error) {
-            console.log(error)
-            res.status(500).json({ error: "Terjadi keselahan saat mengumpulkan tugas" })
+            console.log(error);
+            res.status(500).json({ error: "Terjadi kesalahan saat mengumpulkan tugas" });
         }
     }
 
-    
-    
-    
+
+
+
+
 }
 
 module.exports = TugasController;

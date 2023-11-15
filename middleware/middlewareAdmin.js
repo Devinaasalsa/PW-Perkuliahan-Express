@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const jwtSecret = 'secret_key';
 
-class MiddlewareDosen {
-  isDosen(req, res, next) {
+class MiddlewareAdmin {
+  isAdmin(req, res, next) {
     const authHeader = req.header('Authorization');
     if (!authHeader) {
       return res.status(401).json({ message: 'Authorization header not provided' });
@@ -18,11 +18,11 @@ class MiddlewareDosen {
       const decoded = jwt.verify(token, jwtSecret);
       req.user = decoded;
       console.log(decoded);
-      if (req.user.role === 'Dosen') {
+      if (req.user.role === 'Admin') {
         // Periksa role dengan benar
-        next(); // Izinkan akses bagi pengguna dengan role 'Dosen'
+        next(); // Izinkan akses bagi pengguna dengan role 'Admin'
       } else {
-        return res.status(403).json({ message: 'Anda tidak memiliki akses untuk halaman ini.' });
+        return res.status(403).json({ message: 'Anda tidak memiliki akses sebagai Admin.' });
       }
     } catch (error) {
       return res.status(401).json({ message: 'Invalid token' });
@@ -30,4 +30,4 @@ class MiddlewareDosen {
   }
 }
 
-module.exports = MiddlewareDosen;
+module.exports = MiddlewareAdmin;

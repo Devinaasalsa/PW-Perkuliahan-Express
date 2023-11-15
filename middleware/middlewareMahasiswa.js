@@ -32,7 +32,7 @@ class MiddlewareMahasiswa {
         next(); // Hanya izinkan akses bagi pengguna dengan role 'mahasiswa'
       } else {
         console.log('Akses ditolak untuk role:', req.user.roleName);
-        return res.status(403).json({ message: 'Anda tidak memiliki akses sebagai mahasiswa.' });
+        return res.status(403).json({ message: 'Anda tidak memiliki akses untuk halaman ini.' });
       }
     } catch (error) {
       console.log('Token tidak valid:', error.message);

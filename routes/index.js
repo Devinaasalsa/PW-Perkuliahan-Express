@@ -10,6 +10,7 @@ const TugasController = require('../controllers/tugasController.js')
 const LoginController = require('../controllers/loginController.js')
 const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
+const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -23,9 +24,10 @@ const tugasController = new TugasController()
 const loginController = new LoginController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
+const middlewareAdmin = new MiddlewareAdmin();
 
 
-router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
+router.get('/getMahasiswa', middlewareDosen.isDosen, mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
 router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
 router.patch('/updateMahasiswa/:id', mahasiswaController.updateMahasiswa);
@@ -48,9 +50,10 @@ router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
 //routes absensi
 router.get('/getAbsen', absensiController.getAbsensi);
 router.post('/inputAbsen', absensiController.inputAbsensi);
+router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
 
 //routes role
-router.get('/getRole', roleController.getAllRole);
+router.get('/getRole', middlewareAdmin.isAdmin, roleController.getAllRole);
 router.get('/getRoleById/:id', roleController.getRoleById);
 router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
@@ -63,12 +66,14 @@ router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
 router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)
 
 //route nilai
-router.post('/inputAllNilai', nilaiController.sumNilai)
+router.post('/inputAllNilai/:id', nilaiController.sumNilai)
 
 router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
 router.post('/createTugas', middlewareDosen.isDosen,tugasController.createTugas)
 router.put('/updateTugas/:id', middlewareDosen.isDosen, tugasController.updateTugas)
+router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
+router.put('/kumpulkanTugas/:id', tugasController.kumpulkanTugas)
 
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)

@@ -34,9 +34,9 @@ class AcaraBeritaController {
     }
 
     async createAcaraBerita(req, res) {
-        const { date, jamMasuk, jamKeluar, descMateri } = req.body
+        const { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe } = req.body
         try {
-            const newAcaraBerita = { date, jamMasuk, jamKeluar, descMateri }
+            const newAcaraBerita = { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe }
             const acaraBeritas = await prisma.acaraBerita.create({
                 data: {
                     ...newAcaraBerita,
