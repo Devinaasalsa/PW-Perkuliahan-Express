@@ -17,7 +17,7 @@ export async function DosenSeed() {
 
     const user = await prisma.user.create({
         data: {
-                username: "Devina Diva",
+                username: "Devina Diva M. Kom",
                 password: hashedPassword,
                 roleId: 2,
                 dosenId: dosen.id

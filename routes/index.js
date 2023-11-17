@@ -65,7 +65,7 @@ router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
 
 //routes absensi
 router.get('/getAbsen', absensiController.getAbsensi);
-router.post('/inputAbsen', absensiController.inputAbsensi);
+router.post('/inputAbsen/:id', absensiController.inputAbsensi);
 router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
 
 //routes role
@@ -88,8 +88,8 @@ router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
 router.post('/createTugas', tugasController.createTugas)
 router.put('/updateTugas/:id', tugasController.updateTugas)
-router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
-router.put('/kumpulkanTugas/:id', tugasController.kumpulkanTugas)
+router.put('/updateNilai/:tugasId/:mahasiswaId', middlewareDosen.isDosen, tugasController.updateNilaiTugas)
+router.post('/kumpulkanTugas/:tugasId', middlewareMahasiswa.isMahasiswa, tugasController.kumpulkanTugas)
 
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
