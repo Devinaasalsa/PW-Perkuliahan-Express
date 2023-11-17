@@ -44,13 +44,13 @@ router.delete('/deleteDosen/:id', dosenController.deleteDosen);
 router.get('/getMatkul',  middlewareDosen.isDosen, matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
 router.post('/createMatkul', middlewareDosen.isDosen, matkulController.createMatkul);
-router.patch('/updateMatkul/:id', matkulController.updateMatkul);
-router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
+router.patch('/updateMatkul/:id',  middlewareDosen.isDosen, matkulController.updateMatkul);
+router.delete('/deleteMatkul/:id', middlewareDosen.isDosen, matkulController.deleteMatkul);
 
 //routes absensi
-router.get('/getAbsen', absensiController.getAbsensi);
-router.post('/inputAbsen', absensiController.inputAbsensi);
-router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
+router.get('/getAbsen', middlewareDosen.isDosen, absensiController.getAbsensi);
+router.post('/inputAbsen', middlewareDosen.isDosen, absensiController.inputAbsensi);
+router.get('/getAbsenByMhsId/:id', middlewareDosen.isDosen, absensiController.getLatestAbsenByMhsId);
 
 //routes role
 router.get('/getRole', middlewareAdmin.isAdmin, roleController.getAllRole);
@@ -61,9 +61,9 @@ router.delete('/deleteRole/:id', roleController.deleteRole)
 
 //rute of acara berita page
 router.get('/getAcaraBerita', middlewareMahasiswa.isMahasiswa, acaraBeritaController.getAllAcaraBerita)
-router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
-router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
-router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)
+router.post('/createAcaraBerita', middlewareDosen.isDosen, acaraBeritaController.createAcaraBerita)
+router.put('/updateAcaraBerita/:id', middlewareDosen.isDosen, acaraBeritaController.updateAcaraBerita)
+router.delete('/deleteAcaraBerita/:id', middlewareDosen.isDosen, acaraBeritaController.deleteAcaraBerita)
 
 //route nilai
 router.post('/inputAllNilai/:id', nilaiController.sumNilai)
@@ -72,8 +72,8 @@ router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
 router.post('/createTugas', middlewareDosen.isDosen,tugasController.createTugas)
 router.put('/updateTugas/:id', middlewareDosen.isDosen, tugasController.updateTugas)
-router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
-router.put('/kumpulkanTugas/:id', tugasController.kumpulkanTugas)
+router.put('/updateNilai/:id', middlewareDosen.isDosen, tugasController.updateNilaiTugas)
+router.put('/kumpulkanTugas/:id', middlewareMahasiswa.isMahasiswa, tugasController.kumpulkanTugas)
 
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
