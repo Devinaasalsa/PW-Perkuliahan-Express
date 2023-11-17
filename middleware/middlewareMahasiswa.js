@@ -4,7 +4,7 @@ const jwtSecret = 'secret_key';
 class MiddlewareMahasiswa {
   generateToken(userId) {
     // Buat token JWT dengan role 'Mahasiswa' berdasarkan userId
-    const token = jwt.sign({ userId, roleName: 'Mahasiswa' }, jwtSecret);
+    const token = jwt.sign({ userId, roleName: 'Mahasiswa', mhsId }, jwtSecret);
     return token;
   }
 
@@ -26,10 +26,10 @@ class MiddlewareMahasiswa {
       const decoded = jwt.verify(token, jwtSecret);
       req.user = decoded;
 
-      console.log('Payload Token:', req.user); // Tambahkan ini untuk mencetak role pengguna
+      console.log('Payload Token:', req.user); 
       // Periksa role pengguna
       if (req.user.role === 'Mahasiswa') {
-        next(); // Hanya izinkan akses bagi pengguna dengan role 'mahasiswa'
+        next();
       } else {
         console.log('Akses ditolak untuk role:', req.user.roleName);
         return res.status(403).json({ message: 'Anda tidak memiliki akses untuk halaman ini.' });

@@ -27,7 +27,7 @@ class LoginController {
     }
     // return console.log(user);
     // Buat token JWT
-    const token = jwt.sign({ userId: user.id, role: user.role.roleName }, "secret_key");
+    const token = jwt.sign({ userId: user.id, role: user.role.roleName, mhsId: user.mhsId }, "secret_key");
 
     res.json({
       statuscode: 200,

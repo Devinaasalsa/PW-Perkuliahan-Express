@@ -11,9 +11,9 @@ const prisma = new PrismaClient()
 async function main() {
   // await RoleSeed()
   // await MhsSeed()
-  // await MatkulSeed()
-  // await DosenSeed()
-  // await StatusTugasSeeder()
+  await MatkulSeed()
+  await DosenSeed()
+  await StatusTugasSeeder()
   await StatusAbsen()
 }
 main()
