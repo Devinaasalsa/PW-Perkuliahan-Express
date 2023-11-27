@@ -67,12 +67,11 @@ model Mahasiswa {
   nim     String    @unique
   absensi Absensi[]
 
-  createdAt  DateTime     @default(now())
-  updateAt   DateTime     @updatedAt()
+  createdAt  DateTime    @default(now())
+  updateAt   DateTime    @updatedAt()
   User       User[]
   NilaiAkhir NilaiAkhir?
-    Jawaban Jawaban[]
-
+  Jawaban    Jawaban[]
 }
 
 model AcaraBerita {
@@ -91,7 +90,7 @@ model AcaraBerita {
 model Absensi {
   id Int @id @default(autoincrement())
 
-  pertemuanKe Int 
+  pertemuanKe Int
   mahasiswaId Int
   mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
 
@@ -110,11 +109,11 @@ model StatusAbsen {
 }
 
 model NilaiAkhir {
-  id           Int       @id @default(autoincrement())
-  mhsId        Int @unique
-  mahasiswa    Mahasiswa @relation(fields: [mhsId], references: [id])
-  totalAbsen   Int
-  
+  id         Int       @id @default(autoincrement())
+  mhsId      Int       @unique
+  mahasiswa  Mahasiswa @relation(fields: [mhsId], references: [id])
+  totalAbsen Int
+
   nilaiTugas   Float
   uts          Float
   uas          Float
@@ -130,8 +129,8 @@ model NilaiAkhir {
 model Tugas {
   id            Int         @id @default(autoincrement())
   judul         String
-  dosenId       Int
-  dosen         Dosen       @relation(fields: [dosenId], references: [id])
+  dosenId       Int?
+  dosen         Dosen?      @relation(fields: [dosenId], references: [id])
   deskripsi     String
   lampiran      String
   dueDate       DateTime
@@ -146,19 +145,21 @@ model Tugas {
 }
 
 model Jawaban {
-  jawabanId Int @id @default(autoincrement())
-  lampiranJawaban String
+  jawabanId        Int          @id @default(autoincrement())
+  lampiranJawaban  String
   WaktuPengumpulan DateTime
-  point Int?
-  Tugas Tugas @relation(fields: [TugasID], references: [id])
-  TugasID Int
-  Mahasiswa Mahasiswa @relation(fields: [MahasiswaID], references: [id])
-  MahasiswaID Int
+  point            Int?
+  Tugas            Tugas        @relation(fields: [TugasID], references: [id])
+  TugasID          Int
+  statusTugasId    Int?
+  statusTugas      StatusTugas? @relation(fields: [statusTugasId], references: [id])
+  Mahasiswa        Mahasiswa    @relation(fields: [MahasiswaID], references: [id])
+  MahasiswaID      Int
 }
 
-
 model StatusTugas {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   statusTugas String
   tugas       Tugas[]
+  Jawaban     Jawaban[]
 }
