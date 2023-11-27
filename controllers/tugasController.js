@@ -210,13 +210,16 @@ class TugasController {
       console.log("TugasID:", existingTugas.id);
       console.log("MahasiswaID:", mahasiswaId);
         
-        const now = new Date().toISOString();
+      const waktuPengumpulan = new Date().toISOString();
+        const now = new Date().getTime();
         let statusTugas 
-        let message
-        if (existingTugas.dueDate.toISOString() < now) {
+      let message
+      console.log(existingTugas.dueDate.getTime())
+      console.log(now)
+        if (existingTugas.dueDate.getTime() > now) {
             statusTugas = 2 // <- isi dengan status tugas tepat waktu
             message = "Mahasiswa mengumpulkan tepat waktu"
-        } else if (existingTugas.dueDate.toISOString() > now) {
+        } else if (existingTugas.dueDate.getTime() < now) {
             statusTugas = 3 // <- isi dengan status tugas telat
             message = "Mahasiswa telat mengumpulkan tugas"
         }
@@ -225,7 +228,7 @@ class TugasController {
       const jawaban = await prisma.jawaban.create({
         data: {
           lampiranJawaban: req.files[0].filename,
-          WaktuPengumpulan: now,
+          WaktuPengumpulan: waktuPengumpulan,
           Tugas: {
             connect: {
               id: existingTugas.id,
