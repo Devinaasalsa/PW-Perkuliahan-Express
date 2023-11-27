@@ -13,8 +13,8 @@ async function main() {
   // await MhsSeed()
   // await MatkulSeed()
   // await DosenSeed()
-  // await StatusTugasSeeder()
-  await StatusAbsen()
+  await StatusTugasSeeder()
+  // await StatusAbsen()
 }
 main()
   .then(async () => {

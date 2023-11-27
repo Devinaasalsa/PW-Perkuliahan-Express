@@ -5,6 +5,7 @@ class AbsensiController {
 
   //input absensi harus berupa objek
   async inputAbsensi(req, res) {
+    const pertemuanKe = req.params;
     const absensiData = req.body; // Menerima array objek absensi
 
     try {
@@ -23,6 +24,7 @@ class AbsensiController {
 
         const absen = await prisma.absensi.create({
           data: {
+            pertemuanKe: parseInt(pertemuanKe),
             mahasiswa: {
               connect: {
                 id: mahasiswaId,

@@ -59,11 +59,14 @@ class MahasiswaController {
 
       const hashedPassword = await bcrypt.hash(nim, 10); // You can adjust the salt rounds as needed
 
+      const mahasiswaId = mahasiswas.id
+
       const users = await prisma.user.create({
         data: {
           username: mhsName,
           password: hashedPassword,
-          roleId: 3
+          roleId: 3,
+          mhsId: mahasiswaId
         }
       })
       res.json(mahasiswas);
@@ -96,6 +99,13 @@ class MahasiswaController {
             const mahasiswas = await prisma.mahasiswa.delete({
                 where: {id:parseInt(id)},
             })
+
+            const mahasiswaId = mahasiswas.id
+            const users = await prisma.user.delete({
+              where: {
+                id: parseInt(mahasiswaId)
+              }
+            })
             res.status(200).json(mahasiswas);
         } catch (error) {
             console.log(error)
@@ -103,5 +113,7 @@ class MahasiswaController {
           }
     }
 
+
+  
 };
 module.exports = MahasiswaController;

@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 
 export async function MhsSeed() {
 
-    const mahasiswa = await prisma.mahasiswa.create({
+    const mahasiswa = await prisma.mahasiswa.createMany({
         data: [
           {
           mhsName: "Devina Diva",
@@ -19,15 +19,14 @@ export async function MhsSeed() {
           mhsName: "Nazwa Aulia",
           nim: "12108660",
         }
-      
-      ]
+      ],
       })
 
       const hashedPwDep = await bcrypt.hash("12108381", 10); // You can adjust the salt rounds as needed
       const hashedPwAghies = await bcrypt.hash("12108282", 10); // You can adjust the salt rounds as needed
       const hashedPwNaz = await bcrypt.hash("12108660", 10); // You can adjust the salt rounds as needed
  
-    const user = await prisma.user.create({
+    const user = await prisma.user.createMany({
 
 
         data: [
@@ -35,21 +34,21 @@ export async function MhsSeed() {
                 username: "Devina Diva",
                 password: hashedPwDep,
                 roleId: 3,
-                mhsId: mahasiswa.id
+                mhsId: 1
 
             },
             {
-              username: "Devina Diva",
+              username: "Aghiesna Nayla",
               password: hashedPwAghies,
               roleId: 3,
-              mhsId: mahasiswa.id
+              mhsId: 2
 
           },
           {
-            username: "Devina Diva",
+            username: "Nazwa Aulia",
             password: hashedPwNaz,
             roleId: 3,
-            mhsId: mahasiswa.id
+            mhsId: 3
 
         }
           ]
