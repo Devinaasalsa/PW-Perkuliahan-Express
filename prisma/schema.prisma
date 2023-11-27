@@ -11,6 +11,14 @@ datasource db {
 }
 
 // admin models
+model Admin {
+  id        Int      @id @default(autoincrement())
+  adminName String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+  User      User[]
+}
 
 model User {
   id       Int    @id @default(autoincrement())
@@ -22,8 +30,12 @@ model User {
   mhsId     Int?
   mahasiswa Mahasiswa? @relation(fields: [mhsId], references: [id])
 
-  dosenId   Int?
-  dosen     Dosen?   @relation(fields: [dosenId], references: [id])
+  dosenId Int?
+  dosen   Dosen? @relation(fields: [dosenId], references: [id])
+
+  adminId Int?
+  admin   Admin? @relation(fields: [adminId], references: [id])
+
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
@@ -68,8 +80,8 @@ model Mahasiswa {
   nim     String    @unique
   absensi Absensi[]
 
-  createdAt  DateTime     @default(now())
-  updateAt   DateTime     @updatedAt()
+  createdAt  DateTime    @default(now())
+  updateAt   DateTime    @updatedAt()
   User       User[]
   NilaiAkhir NilaiAkhir?
 }
@@ -108,11 +120,11 @@ model StatusAbsen {
 }
 
 model NilaiAkhir {
-  id           Int       @id @default(autoincrement())
-  mhsId        Int @unique
-  mahasiswa    Mahasiswa @relation(fields: [mhsId], references: [id])
-  totalAbsen   Int
-  
+  id         Int       @id @default(autoincrement())
+  mhsId      Int       @unique
+  mahasiswa  Mahasiswa @relation(fields: [mhsId], references: [id])
+  totalAbsen Int
+
   nilaiTugas   Float
   uts          Float
   uas          Float

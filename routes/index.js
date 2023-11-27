@@ -11,6 +11,8 @@ const LoginController = require('../controllers/loginController.js')
 const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
+const AdminController = require('../controllers/adminController.js')
+
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -25,6 +27,8 @@ const loginController = new LoginController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
+const adminController = new AdminController();
+
 
 // function isMahasiswa(req, res, next) {
 //   if (req.user && req.user.roleId === 'admin') {
@@ -43,23 +47,33 @@ const middlewareAdmin = new MiddlewareAdmin();
 // }
 
 
-router.get('/getMahasiswa', middlewareDosen.isDosen, mahasiswaController.getAllMahasiswa);
+const isAdmin = middlewareAdmin.isAdmin;
+const isMahasiswa = middlewareMahasiswa.isMahasiswa;
+const isDosen = middlewareDosen.isDosen;
+
+router.get('/getMahasiswa', isAdmin, isDosen, mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
-router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
-router.patch('/updateMahasiswa/:id', mahasiswaController.updateMahasiswa);
-router.delete('/deleteMahasiswa/:id', mahasiswaController.deleteMahasiswa);
+router.post('/createMahasiswa', isAdmin, mahasiswaController.createMahasiswa);
+router.patch('/updateMahasiswa/:id', isAdmin, mahasiswaController.updateMahasiswa);
+router.delete('/deleteMahasiswa/:id', isAdmin, mahasiswaController.deleteMahasiswa);
+
+router.get('/getAdmin', isAdmin, adminController.getAllAdmin);
+router.post('/createAdmin', isAdmin, adminController.createAdmin);
+router.patch('/updateAdmin/:id', isAdmin, adminController.updateAdmin);
+router.delete('/deleteAdmin/:id', isAdmin, adminController.deleteAdmin);
+
 
 // routes of dosen page
-router.get('/getDosen', dosenController.getAllDosen);
-router.get('/getDosenById/:id', dosenController.getDosenById)
-router.post('/createDosen', dosenController.createDosen);
-router.patch('/updateDosen/:id', dosenController.updateDosen);
-router.delete('/deleteDosen/:id', dosenController.deleteDosen);
+router.get('/getDosen', isAdmin,dosenController.getAllDosen);
+router.get('/getDosenById/:id', isAdmin,dosenController.getDosenById)
+router.post('/createDosen', isAdmin,dosenController.createDosen);
+router.patch('/updateDosen/:id', isAdmin,dosenController.updateDosen);
+router.delete('/deleteDosen/:id', isAdmin,dosenController.deleteDosen);
 
 //routes matkul
-router.get('/getMatkul',  middlewareDosen.isDosen, matkulController.getAllMatkul);
+router.get('/getMatkul', isDosen, isMahasiswa, matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
-router.post('/createMatkul', middlewareDosen.isDosen, matkulController.createMatkul);
+router.post('/createMatkul', isDosen, matkulController.createMatkul);
 router.patch('/updateMatkul/:id', matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
 
@@ -69,14 +83,14 @@ router.post('/inputAbsen', absensiController.inputAbsensi);
 router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
 
 //routes role
-router.get('/getRole', middlewareAdmin.isAdmin, roleController.getAllRole);
+router.get('/getRole', isAdmin, roleController.getAllRole);
 router.get('/getRoleById/:id', roleController.getRoleById);
 router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
 router.delete('/deleteRole/:id', roleController.deleteRole)
 
 //rute of acara berita page
-router.get('/getAcaraBerita', middlewareMahasiswa.isMahasiswa, acaraBeritaController.getAllAcaraBerita)
+router.get('/getAcaraBerita', isMahasiswa, acaraBeritaController.getAllAcaraBerita)
 router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
 router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
 router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)

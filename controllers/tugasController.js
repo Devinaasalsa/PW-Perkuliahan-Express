@@ -145,11 +145,14 @@ class TugasController {
                 return res.status(400).json({ error: "Tugas tidak ditemukan" });
             }
 
+            
+
             // Update tugasSiswa
             const updatedTugas = await prisma.tugas.update({
                 where: { id: parseInt(id) },
                 data: {
                     tugasSiswa: req.files[0].filename,
+                    statusTugasId: 2
                 },
             });
 
@@ -193,10 +196,6 @@ class TugasController {
             res.status(500).json({ error: "Terjadi kesalahan saat mengumpulkan tugas" });
         }
     }
-
-
-
-
 
 }
 

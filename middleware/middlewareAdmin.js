@@ -22,7 +22,7 @@ class MiddlewareAdmin {
         // Periksa role dengan benar
         next(); // Izinkan akses bagi pengguna dengan role 'Admin'
       } else {
-        return res.status(403).json({ message: 'Anda tidak memiliki akses sebagai Admin.' });
+        return res.status(403).json({ message: 'Anda tidak memiliki akses untuk halaman ini.' });
       }
     } catch (error) {
       return res.status(401).json({ message: 'Invalid token' });
