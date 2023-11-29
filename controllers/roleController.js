@@ -34,6 +34,34 @@ class RoleController {
     }
   }
 
+  async searchRole(req, res) {
+    const { roleName } = req.query;
+
+    try {
+      let searchCondition = {};
+
+      if (roleName) {
+        searchCondition = {
+          ...searchCondition,
+          roleName: {
+            contains: roleName,
+          },
+        };
+      }
+
+      const role = await prisma.role.findMany({
+        where: {
+          OR: [searchCondition],
+        },
+      });
+
+      res.status(200).json(role);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat mencari role", error);
+      res.status(500).json({ error: "Terjadi kesalahan saat mencari role" });
+    }
+  }
+
   async createRole(req, res) {
     const { roleName } = req.body;
     try {

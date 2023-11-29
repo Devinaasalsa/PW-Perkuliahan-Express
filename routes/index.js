@@ -79,6 +79,7 @@ router.get('/getRoleById/:id', roleController.getRoleById);
 router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
 router.delete('/deleteRole/:id', roleController.deleteRole)
+router.get('/searchRole?', roleController.searchRole);
 
 
 //rute of acara berita page
