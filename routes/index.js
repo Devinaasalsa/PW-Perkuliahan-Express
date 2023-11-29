@@ -55,6 +55,8 @@ router.get('/getDosenById/:id', isAdmin,dosenController.getDosenById)
 router.post('/createDosen', isAdmin,dosenController.createDosen);
 router.patch('/updateDosen/:id', isAdmin,dosenController.updateDosen);
 router.delete('/deleteDosen/:id', isAdmin,dosenController.deleteDosen);
+router.get('/searchDosen?', dosenController.searchDosen);
+
 
 //routes matkul
 router.get('/getMatkul', isDosen, isMahasiswa, matkulController.getAllMatkul);
