@@ -65,6 +65,8 @@ router.get('/getMatkulById/:id', matkulController.getMatkulById);
 router.post('/createMatkul', isDosen, matkulController.createMatkul);
 router.patch('/updateMatkul/:id', matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
+router.get('/searchMatkul?', matkulController.searchMatkul);
+
 
 //routes absensi
 router.get('/getAbsen', absensiController.getAbsensi);
