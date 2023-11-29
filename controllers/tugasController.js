@@ -44,7 +44,33 @@ class TugasController {
     }
   }
   
-  
+  async searchTugas(req, res) {
+    const { judul } = req.query;
+
+    try {
+      let searchCondition = {};
+
+      if (judul) {
+        searchCondition = {
+          ...searchCondition,
+          judul: {
+            contains: judul,
+          },
+        };
+      }
+
+      const tugas = await prisma.tugas.findMany({
+        where: {
+          OR: [searchCondition],
+        },
+      });
+
+      res.status(200).json(tugas);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat mencari Tugas", error);
+      res.status(500).json({ error: "Terjadi kesalahan saat mencari Tugas" });
+    }
+  }
 
   async getTugasById(req, res) {
     const { id } = req.params;
@@ -66,7 +92,6 @@ class TugasController {
     }
   }
 
-  //for dosen
   async createTugas(req, res) {
     const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } =
       req.body;
@@ -168,7 +193,6 @@ class TugasController {
     }
   }
 
-  //for mahasiswa
   async kumpulkanTugas(req, res) {
       const { tugasId } = req.params;
       const { namaMahasiswa  } =

@@ -80,6 +80,7 @@ router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
 router.delete('/deleteRole/:id', roleController.deleteRole)
 
+
 //rute of acara berita page
 router.get('/getAcaraBerita', isMahasiswa, acaraBeritaController.getAllAcaraBerita)
 router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
@@ -97,7 +98,7 @@ router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
 router.put('/kumpulkanTugas/:tugasId', tugasController.kumpulkanTugas)
 router.get('/getKumpulkanTugas/:tugasId', tugasController.getTugasKumpulkanById)
 router.get('/getAllKumpulkanTugas', tugasController.getAllKumpulkanTugas)
-// router.get('getKumpulkanTugas/:id')
+router.get('/searchTugas?', tugasController.searchTugas);
 
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
