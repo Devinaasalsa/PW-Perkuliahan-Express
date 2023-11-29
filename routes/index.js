@@ -47,6 +47,7 @@ router.get('/getAdmin', isAdmin, adminController.getAllAdmin);
 router.post('/createAdmin',  adminController.createAdmin);
 router.patch('/updateAdmin/:id', isAdmin, adminController.updateAdmin);
 router.delete('/deleteAdmin/:id', isAdmin, adminController.deleteAdmin);
+router.get('/searchAdmin?', adminController.searchAdmin);
 
 
 // routes of dosen page

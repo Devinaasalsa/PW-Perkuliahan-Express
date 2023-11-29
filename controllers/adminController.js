@@ -6,14 +6,47 @@ const bcrypt = require('bcrypt');
 
 class AdminController {
     async getAllAdmin(req, res) {
+    try {
+        const admins = await prisma.admin.findMany();
+        
+        const adminsWithoutPassword = admins.map(({ password, ...adminWithoutPassword }) => adminWithoutPassword);
+
+        res.status(200).json(adminsWithoutPassword);
+    } catch (error) {
+        console.error("Terjadi kesalahan saat menampilkan data admin", error);
+        res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data admin" });
+    }
+}
+
+
+    async searchAdmin(req, res) {
+        const { adminName} = req.query;
+    
         try {
-            const admins = await prisma.admin.findMany();
-            res.status(200).json(admins);
+            let searchCondition = {};
+    
+            if (adminName) {
+                searchCondition = {
+                    ...searchCondition,
+                    adminName: {
+                        contains: adminName,
+                    },
+                };
+            }
+    
+            const admins = await prisma.admin.findMany({
+                where: {
+                    OR: [searchCondition],
+                },
+            });
+
+            const adminsWithoutPassword = admins.map(({ password, ...adminWithoutPassword }) => adminWithoutPassword);
+
+    
+            res.status(200).json(adminsWithoutPassword);
         } catch (error) {
-            console.error("Terjadi kesalahan saat menampilkan data admin", error);
-            res
-                .status(500)
-                .json({ error: "Terjadi kesalahan saat menampilkan data admin" });
+            console.error("Terjadi kesalahan saat mencari admin", error);
+            res.status(500).json({ error: "Terjadi kesalahan saat mencari admin" });
         }
     }
 
