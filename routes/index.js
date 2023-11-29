@@ -35,11 +35,13 @@ const isAdmin = middlewareAdmin.isAdmin;
 const isMahasiswa = middlewareMahasiswa.isMahasiswa;
 const isDosen = middlewareDosen.isDosen;
 
-router.get('/getMahasiswa', isAdmin, isDosen, mahasiswaController.getAllMahasiswa);
+router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
 router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
 router.patch('/updateMahasiswa/:id', isAdmin, mahasiswaController.updateMahasiswa);
 router.delete('/deleteMahasiswa/:id', isAdmin, mahasiswaController.deleteMahasiswa);
+router.get('/searchMahasiswa?', mahasiswaController.searchMahasiswa);
+
 
 router.get('/getAdmin', isAdmin, adminController.getAllAdmin);
 router.post('/createAdmin',  adminController.createAdmin);

@@ -36,6 +36,46 @@ class MahasiswaController {
         }
     }
 
+    async searchMahasiswa(req, res) {
+      const { mhsName, nim } = req.query;
+  
+      try {
+          let searchCondition = {};
+  
+          if (mhsName) {
+              searchCondition = {
+                  ...searchCondition,
+                  mhsName: {
+                      contains: mhsName,
+                      // mode: 'insensitive',
+                  },
+              };
+          }
+  
+          if (nim) {
+              searchCondition = {
+                  ...searchCondition,
+                  nim: {
+                      contains: nim,
+                      // mode: 'insensitive',
+                  },
+              };
+          }
+  
+          const mahasiswas = await prisma.mahasiswa.findMany({
+              where: {
+                  OR: [searchCondition],
+              },
+          });
+  
+          res.status(200).json(mahasiswas);
+      } catch (error) {
+          console.error("Terjadi kesalahan saat mencari mahasiswa", error);
+          res.status(500).json({ error: "Terjadi kesalahan saat mencari mahasiswa" });
+      }
+  }
+  
+
     async createMahasiswa(req, res) {
     const { mhsName, nim } = req.body;
     try {
