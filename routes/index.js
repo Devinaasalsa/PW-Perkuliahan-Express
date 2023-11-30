@@ -53,7 +53,7 @@ router.get('/searchAdmin?', adminController.searchAdmin);
 // routes of dosen page
 router.get('/getDosen', isAdmin,dosenController.getAllDosen);
 router.get('/getDosenById/:id', isAdmin,dosenController.getDosenById)
-router.post('/createDosen', isAdmin,dosenController.createDosen);
+router.post('/createDosen',dosenController.createDosen);
 router.patch('/updateDosen/:id', isAdmin,dosenController.updateDosen);
 router.delete('/deleteDosen/:id', isAdmin,dosenController.deleteDosen);
 router.get('/searchDosen?', dosenController.searchDosen);
@@ -62,7 +62,7 @@ router.get('/searchDosen?', dosenController.searchDosen);
 //routes matkul
 router.get('/getMatkul', isDosen, isMahasiswa, matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
-router.post('/createMatkul', isDosen, matkulController.createMatkul);
+router.post('/createMatkul', matkulController.createMatkul);
 router.patch('/updateMatkul/:id', matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
 router.get('/searchMatkul?', matkulController.searchMatkul);
