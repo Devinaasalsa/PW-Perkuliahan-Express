@@ -9,12 +9,12 @@ const { RoleSeed } = require('./roleSeeder')
 const prisma = new PrismaClient()
 
 async function main() {
-  // await RoleSeed()
-  // await MhsSeed()
-  // await MatkulSeed()
-  // await DosenSeed()
+  await RoleSeed()
+  await MhsSeed()
+  await MatkulSeed()
+  await DosenSeed()
   await StatusTugasSeeder()
-  // await StatusAbsen()
+  await StatusAbsen()
 }
 main()
   .then(async () => {

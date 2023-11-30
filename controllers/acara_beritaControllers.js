@@ -34,62 +34,79 @@ class AcaraBeritaController {
     }
 
     async createAcaraBerita(req, res) {
-        const { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe } = req.body
         try {
-            const newAcaraBerita = { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe }
-            const acaraBeritas = await prisma.acaraBerita.create({
-                data: {
-                    ...newAcaraBerita,
-                    date: new Date(date)
+            const { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe } = req.body;
+
+            // Menghitung jumlah mahasiswa yang hadir pada pertemuan tertentu
+            const countHadir = await prisma.absensi.count({
+                where: {
+                    pertemuanKe: pertemuanKe,
+                    statusId: 1, // ID untuk status "hadir"
                 },
             });
-            res.json(acaraBeritas)
+
+            const jmlMhsHadir = countHadir;
+
+            const newBeritaAcara = {
+                date,
+                jamMasuk,
+                jamKeluar,
+                descMateri,
+                dosenId,
+                pertemuanKe,
+                jmlMhsHadir, // Menambahkan jumlah mahasiswa yang hadir
+            };
+
+            const beritaAcara = await prisma.beritaAcara.create({
+                data: newBeritaAcara,
+            });
+
+            res.json(beritaAcara);
         } catch (error) {
-            console.error("Terjadi kesalahan saat membuat acara berita", error)
-            res
-                .status(500)
-                .json({ error: "Terjadi kesalah saat membuat acara berita" })
+            console.error('Terjadi kesalahan saat membuat berita acara', error);
+            res.status(500).json({ error: 'Terjadi kesalahan saat membuat berita acara' });
         }
     }
+      
 
     async updateAcaraBerita(req, res) {
-        const { date, jamMasuk, jamKeluar, descMateri } = req.body;
-        const { id } = req.params;
-    
-        try {
-            // Pastikan id sudah dikonversi ke integer jika diperlukan
-            const acaraBeritas = await prisma.acaraBerita.update({
-                where: { id: parseInt(id) },
-                data: { date, jamMasuk, jamKeluar, descMateri }
-            });
-    
-            // Respon dengan status 200 (OK) dan data yang diperbarui
-            res.status(200).json(acaraBeritas);
-        } catch (error) {
-            // Tangani kesalahan dengan status 500 (Internal Server Error)
-            console.log(error);
-            res.status(500).json({ error: "Terjadi kesalahan saat update berita acara" });
+            const { date, jamMasuk, jamKeluar, descMateri } = req.body;
+            const { id } = req.params;
+
+            try {
+                // Pastikan id sudah dikonversi ke integer jika diperlukan
+                const acaraBeritas = await prisma.acaraBerita.update({
+                    where: { id: parseInt(id) },
+                    data: { date, jamMasuk, jamKeluar, descMateri }
+                });
+
+                // Respon dengan status 200 (OK) dan data yang diperbarui
+                res.status(200).json(acaraBeritas);
+            } catch (error) {
+                // Tangani kesalahan dengan status 500 (Internal Server Error)
+                console.log(error);
+                res.status(500).json({ error: "Terjadi kesalahan saat update berita acara" });
+            }
         }
-    }
     
 
     async deleteAcaraBerita(req, res) {
-        const { id } = req.params;
+            const { id } = req.params;
 
-        try {
-            const acaraBeritas = await prisma.acaraBerita.delete({
-                where: {
-                    id: parseInt(id) // Anda perlu mengonversi id ke tipe data yang sesuai (misalnya, integer) jika id tersebut bukan string.
-                }
-            });
-        
-            // Lanjutkan dengan respons atau tindakan lain setelah penghapusan berhasil
-            res.json({ message: "Data acara berita berhasil dihapus" });
-        } catch (error) {
-            console.error("Terjadi kesalahan saat menghapus data acaraBerita", error);
-            res.status(500).json({ error: "Terjadi kesalahan saat menghapus data acaraBerita" });
+            try {
+                const acaraBeritas = await prisma.acaraBerita.delete({
+                    where: {
+                        id: parseInt(id) // Anda perlu mengonversi id ke tipe data yang sesuai (misalnya, integer) jika id tersebut bukan string.
+                    }
+                });
+
+                // Lanjutkan dengan respons atau tindakan lain setelah penghapusan berhasil
+                res.json({ message: "Data acara berita berhasil dihapus" });
+            } catch (error) {
+                console.error("Terjadi kesalahan saat menghapus data acaraBerita", error);
+                res.status(500).json({ error: "Terjadi kesalahan saat menghapus data acaraBerita" });
+            }
         }
-    }        
-}
+    }
 
 module.exports = AcaraBeritaController;

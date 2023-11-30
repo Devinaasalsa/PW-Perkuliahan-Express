@@ -77,7 +77,7 @@ class MahasiswaController {
 
 
   async createMahasiswa(req, res) {
-    const { mhsName, nim } = req.body;
+    const { mhsName, nim, tempatLahir, tanggalLahir, alamat } = req.body;
     try {
       const existingNim = await prisma.mahasiswa.findUnique({
         where: {
@@ -90,7 +90,7 @@ class MahasiswaController {
           error: "Gagal mendaftarkan mahasiswa, NIM telah terdaftar",
         });
       }
-      const newMahasiswa = { mhsName, nim };
+      const newMahasiswa = { mhsName, nim, tempatLahir, tanggalLahir, alamat };
       const mahasiswas = await prisma.mahasiswa.create({
         data: {
           ...newMahasiswa,

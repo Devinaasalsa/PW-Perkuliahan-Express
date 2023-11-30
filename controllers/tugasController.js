@@ -45,7 +45,7 @@ class TugasController {
   }
   
   async searchTugas(req, res) {
-    const { judul } = req.query;
+    const { judul, topik } = req.query;
 
     try {
       let searchCondition = {};
@@ -55,6 +55,14 @@ class TugasController {
           ...searchCondition,
           judul: {
             contains: judul,
+          },
+        };
+      }
+      if (topik) {
+        searchCondition = {
+          ...searchCondition,
+          topik: {
+            contains: topik,
           },
         };
       }

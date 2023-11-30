@@ -3,17 +3,20 @@ const prisma = new PrismaClient()
 
 export async function StatusTugasSeeder() {
   const status = await prisma.statusTugas.createMany({
-    data:[
-        {
-            statusTugas: "Ditugaskan"
-        },
-        {
-            statusTugas: "Selesai"
-        },{
-            statusTugas: "Belum Diserahkan"
-        },
+    data: [
+      {
+        statusTugas: "Ditugaskan"
+      },
+      {
+        statusTugas: "Diserahkan"
+      },
+      {
+        statusTugas: "Telat Diserahkan"
+      }, {
+        statusTugas: "Belum Diserahkan"
+      },
     ]
-    
+
   })
 
 

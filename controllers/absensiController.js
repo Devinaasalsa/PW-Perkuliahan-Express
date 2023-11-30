@@ -5,49 +5,64 @@ class AbsensiController {
 
   //input absensi harus berupa objek
   async inputAbsensi(req, res) {
-    const pertemuanKe = req.params;
-    const absensiData = req.body; // Menerima array objek absensi
-
     try {
+      const { pertemuanKe, absensiData } = req.body;
+  
+      // Gunakan Promise.all untuk membuat banyak permintaan secara bersamaan
       const absenPromises = absensiData.map(async (data) => {
         const { mahasiswaId, statusId } = data;
-
-        const countHadir = await prisma.absensi.findMany({
+  
+        const existingMahasiswa = await prisma.mahasiswa.findUnique({
+          where: { id: mahasiswaId },
+        });
+  
+        if (!existingMahasiswa) {
+          return res.status(404).json({ error: `Mahasiswa dengan ID ${mahasiswaId} tidak ditemukan.` });
+        }
+  
+        const existingStatusAbsen = await prisma.statusAbsen.findUnique({
+          where: { id: statusId },
+        });
+  
+        if (!existingStatusAbsen) {
+          return res.status(404).json({ error: 'Status absen tidak ditemukan.' });
+        }
+  
+        const countHadir = await prisma.absensi.count({
           where: {
             mahasiswaId: mahasiswaId,
-            statusId: 1, // ID untuk status "hadir"
+            statusId: statusId,
+            pertemuanKe: pertemuanKe,
           },
         });
-
-        const totalHadir = countHadir.length;
-        const hadir = totalHadir;
-
-        const absen = await prisma.absensi.create({
+  
+        const totalHadir = countHadir;
+  
+        const absensi = await prisma.absensi.create({
           data: {
-            pertemuanKe: parseInt(pertemuanKe),
+            pertemuanKe: pertemuanKe,
             mahasiswa: {
               connect: {
                 id: mahasiswaId,
               },
             },
             statusId: statusId,
-            totalHadir: statusId === 1 ? hadir + 1 : hadir,
+            totalHadir: totalHadir + 1,
           },
         });
-
-        return absen;
+  
+        return absensi;
       });
-
+  
       const createdAbsensi = await Promise.all(absenPromises);
-
+  
       res.json(createdAbsensi);
     } catch (error) {
-      console.error("Terjadi kesalahan saat menginput absensi", error);
-      res
-        .status(500)
-        .json({ error: "Terjadi kesalahan saat menginput absensi" });
+      console.error('Terjadi kesalahan saat mengabsen siswa', error);
+      res.status(500).json({ error: 'Terjadi kesalahan saat mengabsen siswa' });
     }
   }
+
 
   async getAbsensi(req, res) {
     try {
