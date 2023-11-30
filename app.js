@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var cors = require('cors')
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
@@ -13,7 +14,7 @@ var upload = require('./middleware/uploadFile'); // Import konfigurasi multer
 var app = express();
 
 app.use(upload)
-  
+app.use(cors())  
   
 
 app.use(logger('dev'));

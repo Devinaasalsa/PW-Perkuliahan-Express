@@ -32,6 +32,7 @@ class LoginController {
     res.json({
       statuscode: 200,
       token,
+      role: user.role.roleName
       //user
     });
         } catch (error) {
