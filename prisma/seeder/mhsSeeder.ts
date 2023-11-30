@@ -10,14 +10,21 @@ export async function MhsSeed() {
           {
           mhsName: "Devina Diva",
           nim: "12108381",
+          tanggalLahir: "15/05/2006",
+          alamat: "Villa Mutiara Lido Bogor"
         },
         {
           mhsName: "Aghiesna Nayla",
           nim: "12108282",
+          tanggalLahir: "15/08/2006",
+          alamat: "Villa Mutiara Lido Bogor"
         },
         {
           mhsName: "Nazwa Aulia",
           nim: "12108660",
+          tanggalLahir: "05/05/2006",
+          alamat: "Villa Mutiara Lido Bogor"
+
         }
       ],
       })

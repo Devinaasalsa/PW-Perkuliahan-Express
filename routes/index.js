@@ -70,7 +70,7 @@ router.get('/searchMatkul?', matkulController.searchMatkul);
 
 //routes absensi
 router.get('/getAbsen', absensiController.getAbsensi);
-router.post('/inputAbsen/:id', absensiController.inputAbsensi);
+router.post('/inputAbsen/', absensiController.inputAbsensi);
 router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
 
 //routes role
