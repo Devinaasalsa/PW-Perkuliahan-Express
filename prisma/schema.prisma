@@ -11,6 +11,24 @@ datasource db {
 }
 
 // admin models
+model Admin {
+  id        Int      @id @default(autoincrement())
+  adminName String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+  User      User[]
+}
+
+model Token {
+  id    Int    @id @default(autoincrement())
+  value String @unique
+
+  expired Boolean
+  revoked Boolean
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+}
 
 model User {
   id       Int    @id @default(autoincrement())
@@ -22,8 +40,14 @@ model User {
   mhsId     Int?
   mahasiswa Mahasiswa? @relation(fields: [mhsId], references: [id])
 
-  dosenId   Int?
-  dosen     Dosen?   @relation(fields: [dosenId], references: [id])
+  dosenId Int?
+  dosen   Dosen? @relation(fields: [dosenId], references: [id])
+
+  adminId Int?
+  admin   Admin? @relation(fields: [adminId], references: [id])
+
+  tokens Token[]
+
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
@@ -50,17 +74,6 @@ model Dosen {
   AcaraBerita AcaraBerita[]
 }
 
-model Matkul {
-  id         Int      @id @default(autoincrement())
-  code       String   @unique
-  namaMatkul String   @unique
-  jmlSks     Int
-  semester   Int
-  dosen      Dosen[]
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt()
-}
-
 model Mahasiswa {
   id      Int       @id @default(autoincrement())
   mhsName String
@@ -72,6 +85,17 @@ model Mahasiswa {
   User       User[]
   NilaiAkhir NilaiAkhir?
   Jawaban    Jawaban[]
+}
+
+model Matkul {
+  id         Int      @id @default(autoincrement())
+  code       String   @unique
+  namaMatkul String   @unique
+  jmlSks     Int
+  semester   Int
+  dosen      Dosen[]
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt()
 }
 
 model AcaraBerita {
@@ -147,6 +171,7 @@ model Tugas {
 model Jawaban {
   jawabanId        Int          @id @default(autoincrement())
   lampiranJawaban  String
+  linkUrl          String?
   WaktuPengumpulan DateTime
   point            Int?
   Tugas            Tugas        @relation(fields: [TugasID], references: [id])

@@ -12,7 +12,7 @@ class MiddlewareMahasiswa {
     const authHeader = req.header('Authorization');
     if (!authHeader) {
       console.log('Authorization header not provided');
-      return res.status(401).json({ message: 'Authorization header not provided' });
+      return res.status(401).json({ message: 'Login terlebih dahulu' });
     }
 
     const tokenParts = authHeader.split(' ');

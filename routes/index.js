@@ -8,6 +8,7 @@ const RoleController = require('../controllers/roleController.js')
 const NilaiController = require('../controllers/nilaiController.js')
 const TugasController = require('../controllers/tugasController.js')
 const LoginController = require('../controllers/loginController.js')
+const LogoutController = require('../controllers/logoutController.js')
 const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
@@ -22,6 +23,7 @@ const nilaiController = new NilaiController();
 const roleController = new RoleController()
 const tugasController = new TugasController()
 const loginController = new LoginController()
+const logoutController = new LogoutController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
@@ -43,7 +45,7 @@ router.delete('/deleteDosen/:id', dosenController.deleteDosen);
 //routes matkul
 router.get('/getMatkul',  middlewareDosen.isDosen, matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
-router.post('/createMatkul', middlewareDosen.isDosen, matkulController.createMatkul);
+router.post('/createMatkul', matkulController.createMatkul);
 router.patch('/updateMatkul/:id',  middlewareDosen.isDosen, matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', middlewareDosen.isDosen, matkulController.deleteMatkul);
 
@@ -78,27 +80,9 @@ router.get('/getKumpulkanTugas/:tugasId', tugasController.getTugasKumpulkanById)
 router.get('/getAllKumpulkanTugas', tugasController.getAllKumpulkanTugas)
 // router.get('getKumpulkanTugas/:id')
 
-router.post('/login', loginController.LoginMahasiswa)
-// router.post('/login/dosen', loginController.getDosenById)
 
-//logoutzz
-
-
-router.post("/logout", (req, res) => {
-  // Lakukan tindakan logout di sini
-  // Misalnya, menghapus token dari tempat penyimpanan di sisi klien
-  try {
-    delete req.headers["authorization"];
-    res.json({ message: "Logout berhasil" });
-  } catch (error) {
-    console.log(error);
-    res.json({
-      error,
-      statusCode: 500,
-      message: "gagal Logout",
-    });
-  }
-});
-
+// login and logut
+router.post('/login', loginController.LoginMahasiswaDosen)
+router.post('/logout', logoutController.logout)
 
 module.exports = router;

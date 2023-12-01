@@ -37,7 +37,7 @@ class MahasiswaController {
     }
 
     async createMahasiswa(req, res) {
-    const { mhsName, nim } = req.body;
+    const { mhsName, nim, tempatTanggalLahir, alamat } = req.body;
     try {
       const existingNim = await prisma.mahasiswa.findUnique({
         where: {
@@ -83,7 +83,7 @@ class MahasiswaController {
         try {
             const mahasiswas = await prisma.mahasiswa.update({
                 where: {id:parseInt(id)},
-                data: {mhsName, nim}
+                data: {mhsName, nim, tempatTanggalLahir, alamat}
             })
             res.status(200).json(mahasiswas);
         }catch(error) {
