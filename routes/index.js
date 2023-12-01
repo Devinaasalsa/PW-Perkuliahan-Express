@@ -12,6 +12,8 @@ const LogoutController = require('../controllers/logoutController.js')
 const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
+const AdminController = require('../controllers/adminController.js')
+
 
 const router = express.Router();
 const mahasiswaController = new MahasiswaController();
@@ -27,58 +29,81 @@ const logoutController = new LogoutController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
+const adminController = new AdminController();
 
 
-router.get('/getMahasiswa', middlewareDosen.isDosen, mahasiswaController.getAllMahasiswa);
+
+const isAdmin = middlewareAdmin.isAdmin;
+const isMahasiswa = middlewareMahasiswa.isMahasiswa;
+const isDosen = middlewareDosen.isDosen;
+
+router.get('/getMahasiswa', mahasiswaController.getAllMahasiswa);
 router.get('/getMahasiswaById/:id', mahasiswaController.getMahasiswaById)
 router.post('/createMahasiswa', mahasiswaController.createMahasiswa);
-router.patch('/updateMahasiswa/:id', mahasiswaController.updateMahasiswa);
-router.delete('/deleteMahasiswa/:id', mahasiswaController.deleteMahasiswa);
+router.patch('/updateMahasiswa/:id', isAdmin, mahasiswaController.updateMahasiswa);
+router.delete('/deleteMahasiswa/:id', isAdmin, mahasiswaController.deleteMahasiswa);
+router.get('/searchMahasiswa?', mahasiswaController.searchMahasiswa);
+
+
+router.get('/getAdmin', isAdmin, adminController.getAllAdmin);
+router.post('/createAdmin',  adminController.createAdmin);
+router.patch('/updateAdmin/:id', isAdmin, adminController.updateAdmin);
+router.delete('/deleteAdmin/:id', isAdmin, adminController.deleteAdmin);
+router.get('/searchAdmin?', adminController.searchAdmin);
+
 
 // routes of dosen page
-router.get('/getDosen', dosenController.getAllDosen);
-router.get('/getDosenById/:id', dosenController.getDosenById)
-router.post('/createDosen', dosenController.createDosen);
-router.patch('/updateDosen/:id', dosenController.updateDosen);
-router.delete('/deleteDosen/:id', dosenController.deleteDosen);
+router.get('/getDosen', isAdmin,dosenController.getAllDosen);
+router.get('/getDosenById/:id', isAdmin,dosenController.getDosenById)
+router.post('/createDosen',dosenController.createDosen);
+router.patch('/updateDosen/:id', isAdmin,dosenController.updateDosen);
+router.delete('/deleteDosen/:id', isAdmin,dosenController.deleteDosen);
+router.get('/searchDosen?', dosenController.searchDosen);
+
 
 //routes matkul
-router.get('/getMatkul',  middlewareDosen.isDosen, matkulController.getAllMatkul);
+router.get('/getMatkul', isDosen, isMahasiswa, matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
 router.post('/createMatkul', matkulController.createMatkul);
 router.patch('/updateMatkul/:id',  middlewareDosen.isDosen, matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', middlewareDosen.isDosen, matkulController.deleteMatkul);
+router.patch('/updateMatkul/:id', matkulController.updateMatkul);
+router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
+router.get('/searchMatkul?', matkulController.searchMatkul);
+
 
 //routes absensi
 router.get('/getAbsen', absensiController.getAbsensi);
-router.post('/inputAbsen/:id', absensiController.inputAbsensi);
+router.post('/inputAbsen/', absensiController.inputAbsensi);
 router.get('/getAbsenByMhsId/:id', absensiController.getLatestAbsenByMhsId);
 
 //routes role
-router.get('/getRole', middlewareAdmin.isAdmin, roleController.getAllRole);
+router.get('/getRole', isAdmin, roleController.getAllRole);
 router.get('/getRoleById/:id', roleController.getRoleById);
 router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
 router.delete('/deleteRole/:id', roleController.deleteRole)
+router.get('/searchRole?', roleController.searchRole);
+
 
 //rute of acara berita page
-router.get('/getAcaraBerita', middlewareMahasiswa.isMahasiswa, acaraBeritaController.getAllAcaraBerita)
-router.post('/createAcaraBerita', middlewareDosen.isDosen, acaraBeritaController.createAcaraBerita)
-router.put('/updateAcaraBerita/:id', middlewareDosen.isDosen, acaraBeritaController.updateAcaraBerita)
-router.delete('/deleteAcaraBerita/:id', middlewareDosen.isDosen, acaraBeritaController.deleteAcaraBerita)
+router.get('/getAcaraBerita', isMahasiswa, acaraBeritaController.getAllAcaraBerita)
+router.post('/createAcaraBerita', acaraBeritaController.createAcaraBerita)
+router.put('/updateAcaraBerita/:id', acaraBeritaController.updateAcaraBerita)
+router.delete('/deleteAcaraBerita/:id', acaraBeritaController.deleteAcaraBerita)
 
 //route nilai
 router.post('/inputAllNilai/:id', nilaiController.sumNilai)
 
 router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
-router.post('/createTugas', tugasController.createTugas)
+router.post('/createTugas', isDosen, tugasController.createTugas)
 router.put('/updateTugas/:id', tugasController.updateTugas)
 router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
 router.put('/kumpulkanTugas/:tugasId', tugasController.kumpulkanTugas)
 router.get('/getKumpulkanTugas/:tugasId', tugasController.getTugasKumpulkanById)
 router.get('/getAllKumpulkanTugas', tugasController.getAllKumpulkanTugas)
-// router.get('getKumpulkanTugas/:id')
+router.get('/searchTugas?', tugasController.searchTugas);
 
 
 // login and logut

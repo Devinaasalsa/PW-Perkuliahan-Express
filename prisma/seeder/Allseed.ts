@@ -13,6 +13,10 @@ async function main() {
   // await MhsSeed()
   // await MatkulSeed()
   // await DosenSeed()
+  await RoleSeed()
+  await MhsSeed()
+  await MatkulSeed()
+  await DosenSeed()
   await StatusTugasSeeder()
   // await StatusAbsen()
 }

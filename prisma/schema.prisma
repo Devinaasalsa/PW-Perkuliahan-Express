@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+  // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -71,14 +71,16 @@ model Dosen {
   updateAt    DateTime      @updatedAt()
   User        User[]
   Tugas       Tugas[]
-  AcaraBerita AcaraBerita[]
+  BeritaAcara BeritaAcara[]
 }
 
 model Mahasiswa {
-  id      Int       @id @default(autoincrement())
-  mhsName String
-  nim     String    @unique
-  absensi Absensi[]
+  id           Int       @id @default(autoincrement())
+  mhsName      String
+  nim          String    @unique
+  tanggalLahir String
+  alamat       String
+  absensi      Absensi[]
 
   createdAt  DateTime    @default(now())
   updateAt   DateTime    @updatedAt()
@@ -98,7 +100,7 @@ model Matkul {
   updateAt   DateTime @updatedAt()
 }
 
-model AcaraBerita {
+model BeritaAcara {
   id          Int      @id @default(autoincrement())
   dosenId     Int
   pertemuanKe Int
@@ -107,8 +109,10 @@ model AcaraBerita {
   jamMasuk    Int
   jamKeluar   Int
   descMateri  String
-  createdAt   DateTime @default(now())
-  updateAt    DateTime @updatedAt()
+  jmlMhsHadir Int
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
 }
 
 model Absensi {
@@ -188,3 +192,5 @@ model StatusTugas {
   tugas       Tugas[]
   Jawaban     Jawaban[]
 }
+
+

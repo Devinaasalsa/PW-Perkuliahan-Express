@@ -6,38 +6,78 @@ const bcrypt = require('bcrypt')
 
 
 class MahasiswaController {
-    async getAllMahasiswa(req, res) {
+  async getAllMahasiswa(req, res) {
     try {
-        const mahasiswas = await prisma.mahasiswa.findMany();
-        res.status(200).json(mahasiswas);
+      const mahasiswas = await prisma.mahasiswa.findMany();
+      res.status(200).json(mahasiswas);
     } catch (error) {
-        console.error("Terjadi kesalahan saat menampilkan data Mahasiswa", error);
-        res
-          .status(500)
-          .json({ error: "Terjadi kesalahan saat menampilkan data Mahasiswa" });
-      }
-}
-
-    async getMahasiswaById(req, res) {
-        const {id} = req.params;
-        try {
-            const mahasiswas = await prisma.mahasiswa.findFirst({
-                where: {
-                    id: parseInt(id),
-                },
-            });
-            if (!mahasiswas) {
-                return res.json(400).json({error: "Mahasiswa tidak ditemukan"});
-            }
-            res.json(mahasiswas);
-        }catch (error) {
-            console.log(error);
-            res.status(500).json({error: "Terjadi kesalahan saat menampilkan data mahasiswa"})
-        }
+      console.error("Terjadi kesalahan saat menampilkan data Mahasiswa", error);
+      res
+        .status(500)
+        .json({ error: "Terjadi kesalahan saat menampilkan data Mahasiswa" });
     }
+  }
 
-    async createMahasiswa(req, res) {
-    const { mhsName, nim, tempatTanggalLahir, alamat } = req.body;
+  async getMahasiswaById(req, res) {
+    const { id } = req.params;
+    try {
+      const mahasiswas = await prisma.mahasiswa.findFirst({
+        where: {
+          id: parseInt(id),
+        },
+      });
+      if (!mahasiswas) {
+        return res.json(400).json({ error: "Mahasiswa tidak ditemukan" });
+      }
+      res.json(mahasiswas);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data mahasiswa" })
+    }
+  }
+
+  async searchMahasiswa(req, res) {
+    const { mhsName, nim } = req.query;
+
+    try {
+      let searchCondition = {};
+
+      if (mhsName) {
+        searchCondition = {
+          ...searchCondition,
+          mhsName: {
+            contains: mhsName,
+            // mode: 'insensitive',
+          },
+        };
+      }
+
+      if (nim) {
+        searchCondition = {
+          ...searchCondition,
+          nim: {
+            contains: nim,
+            // mode: 'insensitive',
+          },
+        };
+      }
+
+      const mahasiswas = await prisma.mahasiswa.findMany({
+        where: {
+          OR: [searchCondition],
+        },
+      });
+
+      res.status(200).json(mahasiswas);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat mencari mahasiswa", error);
+      res.status(500).json({ error: "Terjadi kesalahan saat mencari mahasiswa" });
+    }
+  }
+
+
+  async createMahasiswa(req, res) {
+    const { mhsName, nim, tempatLahir, tanggalLahir, alamat } = req.body;
     try {
       const existingNim = await prisma.mahasiswa.findUnique({
         where: {
@@ -50,7 +90,7 @@ class MahasiswaController {
           error: "Gagal mendaftarkan mahasiswa, NIM telah terdaftar",
         });
       }
-      const newMahasiswa = { mhsName, nim };
+      const newMahasiswa = { mhsName, nim, tempatLahir, tanggalLahir, alamat };
       const mahasiswas = await prisma.mahasiswa.create({
         data: {
           ...newMahasiswa,
@@ -76,44 +116,42 @@ class MahasiswaController {
         .status(500)
         .json({ error: "Terjadi kesalahan saat mendaftarkan Mahasiswa" });
     }
-}
-    async updateMahasiswa(req, res){
-        const { mhsName, nim } = req.body;
-        const { id } = req.params;
-        try {
-            const mahasiswas = await prisma.mahasiswa.update({
-                where: {id:parseInt(id)},
-                data: {mhsName, nim, tempatTanggalLahir, alamat}
-            })
-            res.status(200).json(mahasiswas);
-        }catch(error) {
-            console.log(error)
-            res.status(500).json({ error: "Terjadi kesalahan saat update data mahasiswa" });
+  }
+  async updateMahasiswa(req, res) {
+    const { mhsName, nim } = req.body;
+    const { id } = req.params;
+    try {
+      const mahasiswas = await prisma.mahasiswa.update({
+        where: { id: parseInt(id) },
+        data: { mhsName, nim }
+      })
+      res.status(200).json(mahasiswas);
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error: "Terjadi kesalahan saat update data mahasiswa" });
+    }
+  }
+
+  async deleteMahasiswa(req, res) {
+    const { id } = req.params;
+
+    try {
+      const mahasiswas = await prisma.mahasiswa.delete({
+        where: { id: parseInt(id) },
+      })
+
+      const mahasiswaId = mahasiswas.id
+      const users = await prisma.user.delete({
+        where: {
+          id: parseInt(mahasiswaId)
         }
+      })
+      res.status(200).json(mahasiswas);
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error: "Terjadi kesalahan saat menghapus data mahasiswa" });
     }
+  }
+}
 
-    async deleteMahasiswa (req, res) {
-        const {id} = req.params;
-
-        try {
-            const mahasiswas = await prisma.mahasiswa.delete({
-                where: {id:parseInt(id)},
-            })
-
-            const mahasiswaId = mahasiswas.id
-            const users = await prisma.user.delete({
-              where: {
-                id: parseInt(mahasiswaId)
-              }
-            })
-            res.status(200).json(mahasiswas);
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({ error: "Terjadi kesalahan saat menghapus data mahasiswa" });
-          }
-    }
-
-
-  
-};
 module.exports = MahasiswaController;
