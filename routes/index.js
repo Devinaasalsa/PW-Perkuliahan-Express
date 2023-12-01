@@ -12,6 +12,7 @@ const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
 const AdminController = require('../controllers/adminController.js')
+const FileKsrController = require('../controllers/fileKsrController.js')
 
 
 const router = express.Router();
@@ -28,6 +29,7 @@ const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
 const adminController = new AdminController();
+const fileKsrController = new FileKsrController();
 
 
 
@@ -42,6 +44,7 @@ router.patch('/updateMahasiswa/:id', isAdmin, mahasiswaController.updateMahasisw
 router.delete('/deleteMahasiswa/:id', isAdmin, mahasiswaController.deleteMahasiswa);
 router.get('/searchMahasiswa?', mahasiswaController.searchMahasiswa);
 
+router.post('/addFileKsr', fileKsrController.addFile);
 
 router.get('/getAdmin', isAdmin, adminController.getAllAdmin);
 router.post('/createAdmin',  adminController.createAdmin);
@@ -80,6 +83,9 @@ router.post('/createRole', roleController.createRole);
 router.patch('/updateRole/:id', roleController.updateRole)
 router.delete('/deleteRole/:id', roleController.deleteRole)
 router.get('/searchRole?', roleController.searchRole);
+
+router.post('/addFile', fileKsrController.addFile);
+
 
 
 //rute of acara berita page

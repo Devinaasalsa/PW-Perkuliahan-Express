@@ -1,3 +1,4 @@
+import { AdminSeed } from "./adminSeeder"
 import { DosenSeed } from "./dosenSeeder"
 import { MatkulSeed } from "./matkulSeeder"
 import { MhsSeed } from "./mhsSeeder"
@@ -9,12 +10,13 @@ const { RoleSeed } = require('./roleSeeder')
 const prisma = new PrismaClient()
 
 async function main() {
-  await RoleSeed()
-  await MhsSeed()
-  await MatkulSeed()
-  await DosenSeed()
-  await StatusTugasSeeder()
-  await StatusAbsen()
+  // await RoleSeed()
+  // await MhsSeed()
+  // await MatkulSeed()
+  // await DosenSeed()
+  // await StatusTugasSeeder()
+  // await StatusAbsen()
+  await AdminSeed()
 }
 main()
   .then(async () => {

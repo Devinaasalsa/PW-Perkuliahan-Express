@@ -29,9 +29,9 @@ export async function MhsSeed() {
       ],
       })
 
-      const hashedPwDep = await bcrypt.hash("12108381", 10); // You can adjust the salt rounds as needed
-      const hashedPwAghies = await bcrypt.hash("12108282", 10); // You can adjust the salt rounds as needed
-      const hashedPwNaz = await bcrypt.hash("12108660", 10); // You can adjust the salt rounds as needed
+      const hashedPwDep = await bcrypt.hash("12108381", 10); 
+      const hashedPwAghies = await bcrypt.hash("12108282", 10); 
+      const hashedPwNaz = await bcrypt.hash("12108660", 10); 
  
     const user = await prisma.user.createMany({
 

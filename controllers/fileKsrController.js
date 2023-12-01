@@ -4,10 +4,9 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcrypt')
 
 
-
-class FormKsrController {
-    async AddForm(req, res) {
-        const { file, semester } = req.body;
+class FileKsrController {
+    async addFile(req, res) {
+        const { semester } = req.body;
         console.log(req.files);
 
         try {
@@ -18,22 +17,22 @@ class FormKsrController {
                 });
             }
 
-            const formKsr = await prisma.fileksr.create({
+            const fileKsr = await prisma.fileKsr.create({
                 data: {
                     file: req.files[0].filename,
-                    semester,
+                    semester: parseInt(semester),
                 },
             });
-            res.json(formKsr);
+            res.json(fileKsr);
         } catch (error) {
             console.log(error);
-            console.error("Terjadi kesalahan saat menambahkan tugas");
+            console.error("Terjadi kesalahan saat mengupload file");
             res
                 .status(500)
-                .json({ error: "Terjadi kesalahaan saat menambahkan tugas" });
+                .json({ error: "Terjadi kesalahaan saat mengupload file" });
         }
 
     }
 }
 
-module.exports = FormKsrController;
+module.exports = FileKsrController;
