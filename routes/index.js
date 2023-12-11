@@ -13,6 +13,7 @@ const MiddlewareDosen = require('../middleware/middlewareDosen.js');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
 const AdminController = require('../controllers/adminController.js')
 const FileKsrController = require('../controllers/fileKsrController.js')
+const UserController = require('../controllers/userController.js')
 
 
 const router = express.Router();
@@ -30,6 +31,7 @@ const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
 const adminController = new AdminController();
 const fileKsrController = new FileKsrController();
+// const userController = new UserController();
 
 
 
@@ -45,6 +47,8 @@ router.delete('/deleteMahasiswa/:id', isAdmin, mahasiswaController.deleteMahasis
 router.get('/searchMahasiswa?', mahasiswaController.searchMahasiswa);
 
 router.post('/addFileKsr', fileKsrController.addFile);
+router.post('/uploadKsrMahasiswa/:ksrId', fileKsrController.uploadKsrMahasiswa);
+
 
 router.get('/getAdmin', isAdmin, adminController.getAllAdmin);
 router.post('/createAdmin',  adminController.createAdmin);
@@ -110,7 +114,7 @@ router.get('/searchTugas?', tugasController.searchTugas);
 router.post('/login', loginController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
 
-//logoutzz
+// router.post('/uploadExcelUser', userController.uploadExcelUser)
 
 
 router.post("/logout", (req, res) => {

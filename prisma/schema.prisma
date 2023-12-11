@@ -1,4 +1,4 @@
-  // This is your Prisma schema file,
+// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -20,25 +20,25 @@ model Admin {
   User      User[]
 }
 
-  model User {
-    id       Int    @id @default(autoincrement())
-    username String
-    password String
-    roleId   Int
-    role     Role   @relation(fields: [roleId], references: [id])
+model User {
+  id       Int    @id @default(autoincrement())
+  username String
+  password String
+  roleId   Int
+  role     Role   @relation(fields: [roleId], references: [id])
 
-    mhsId     Int?
-    mahasiswa Mahasiswa? @relation(fields: [mhsId], references: [id])
+  mhsId     Int?
+  mahasiswa Mahasiswa? @relation(fields: [mhsId], references: [id])
 
-    dosenId Int?
-    dosen   Dosen? @relation(fields: [dosenId], references: [id])
+  dosenId Int?
+  dosen   Dosen? @relation(fields: [dosenId], references: [id])
 
-    adminId Int?
-    admin   Admin? @relation(fields: [adminId], references: [id])
+  adminId Int?
+  admin   Admin? @relation(fields: [adminId], references: [id])
 
-    createdAt DateTime @default(now())
-    updateAt  DateTime @updatedAt()
-  }
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+}
 
 model Role {
   id        Int      @id @default(autoincrement())
@@ -81,11 +81,12 @@ model Mahasiswa {
   alamat       String
   absensi      Absensi[]
 
-  createdAt  DateTime    @default(now())
-  updateAt   DateTime    @updatedAt()
-  User       User[]
-  NilaiAkhir NilaiAkhir?
-  Jawaban    Jawaban[]
+  createdAt    DateTime       @default(now())
+  updateAt     DateTime       @updatedAt()
+  User         User[]
+  NilaiAkhir   NilaiAkhir?
+  Jawaban      Jawaban[]
+  KsrMahasiswa KsrMahasiswa[]
 }
 
 model BeritaAcara {
@@ -181,9 +182,21 @@ model StatusTugas {
 }
 
 model FileKsr {
-  id          Int      @id @default(autoincrement())
-  file String
-  semester Int
-  createdAt   DateTime @default(now())
-  updateAt    DateTime @updatedAt()
+  id           Int            @id @default(autoincrement())
+  file         String
+  semester     Int
+  createdAt    DateTime       @default(now())
+  updateAt     DateTime       @updatedAt()
+  KsrMahasiswa KsrMahasiswa[]
+}
+
+model KsrMahasiswa {
+  id        Int       @id @default(autoincrement())
+  file      String
+  mhsId     Int
+  mhs       Mahasiswa @relation(fields: [mhsId], references: [id])
+  FileKsr   FileKsr   @relation(fields: [FileKsrID], references: [id])
+  FileKsrID Int
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt()
 }

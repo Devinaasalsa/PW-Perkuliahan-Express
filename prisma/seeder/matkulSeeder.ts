@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 export async function MatkulSeed() {
-  const matkul = await prisma.matkul.create({
+  const matkul = await prisma.matkul.createMany({
     data: [
       {
         code: "SI1101",
