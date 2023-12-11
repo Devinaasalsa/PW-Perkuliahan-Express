@@ -7,7 +7,7 @@ const AbsensiController = require('../controllers/absensiController.js')
 const RoleController = require('../controllers/roleController.js')
 const NilaiController = require('../controllers/nilaiController.js')
 const TugasController = require('../controllers/tugasController.js')
-const LoginController = require('../controllers/loginController.js')
+const AuthController = require('../controllers/authController.js')
 const MiddlewareMahasiswa = require('../middleware/middlewareMahasiswa');
 const MiddlewareDosen = require('../middleware/middlewareDosen.js');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin.js');
@@ -25,7 +25,7 @@ const absensiController = new AbsensiController();
 const nilaiController = new NilaiController();
 const roleController = new RoleController()
 const tugasController = new TugasController()
-const loginController = new LoginController()
+const authController = new AuthController()
 const middlewareMahasiswa = new MiddlewareMahasiswa()
 const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
@@ -70,6 +70,8 @@ router.get('/searchDosen?', dosenController.searchDosen);
 router.get('/getMatkul', isDosen, isMahasiswa, matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
 router.post('/createMatkul', matkulController.createMatkul);
+router.patch('/updateMatkul/:id',  middlewareDosen.isDosen, matkulController.updateMatkul);
+router.delete('/deleteMatkul/:id', middlewareDosen.isDosen, matkulController.deleteMatkul);
 router.patch('/updateMatkul/:id', matkulController.updateMatkul);
 router.delete('/deleteMatkul/:id', matkulController.deleteMatkul);
 router.get('/searchMatkul?', matkulController.searchMatkul);
@@ -103,7 +105,7 @@ router.post('/inputAllNilai/:id', nilaiController.sumNilai)
 
 router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
-router.post('/createTugas', isDosen, tugasController.createTugas)
+router.post('/createTugas/:matkulId', isDosen, tugasController.createTugas)
 router.put('/updateTugas/:id', tugasController.updateTugas)
 router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
 router.put('/kumpulkanTugas/:tugasId', tugasController.kumpulkanTugas)
@@ -111,7 +113,7 @@ router.get('/getKumpulkanTugas/:tugasId', tugasController.getTugasKumpulkanById)
 router.get('/getAllKumpulkanTugas', tugasController.getAllKumpulkanTugas)
 router.get('/searchTugas?', tugasController.searchTugas);
 
-router.post('/login', loginController.LoginMahasiswa)
+router.post('/login', authController.LoginMahasiswa)
 // router.post('/login/dosen', loginController.getDosenById)
 
 // router.post('/uploadExcelUser', userController.uploadExcelUser)

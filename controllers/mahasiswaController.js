@@ -152,8 +152,6 @@ class MahasiswaController {
       res.status(500).json({ error: "Terjadi kesalahan saat menghapus data mahasiswa" });
     }
   }
+}
 
-
-
-};
 module.exports = MahasiswaController;

@@ -20,6 +20,16 @@ model Admin {
   User      User[]
 }
 
+model Token {
+  id    Int    @id @default(autoincrement())
+  value String @unique
+
+  expired Boolean
+  revoked Boolean
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+}
+
 model User {
   id       Int    @id @default(autoincrement())
   username String
@@ -35,6 +45,8 @@ model User {
 
   adminId Int?
   admin   Admin? @relation(fields: [adminId], references: [id])
+
+  tokens Token[]
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
@@ -62,17 +74,6 @@ model Dosen {
   BeritaAcara BeritaAcara[]
 }
 
-model Matkul {
-  id         Int      @id @default(autoincrement())
-  code       String   @unique
-  namaMatkul String   @unique
-  jmlSks     Int
-  semester   Int
-  dosen      Dosen[]
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt()
-}
-
 model Mahasiswa {
   id           Int       @id @default(autoincrement())
   mhsName      String
@@ -87,6 +88,18 @@ model Mahasiswa {
   NilaiAkhir   NilaiAkhir?
   Jawaban      Jawaban[]
   KsrMahasiswa KsrMahasiswa[]
+}
+
+model Matkul {
+  id         Int      @id @default(autoincrement())
+  code       String   @unique
+  namaMatkul String   @unique
+  jmlSks     Int
+  semester   Int
+  dosen      Dosen[]
+  Tugas      Tugas[]
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt()
 }
 
 model BeritaAcara {
@@ -144,14 +157,17 @@ model NilaiAkhir {
 }
 
 model Tugas {
-  id            Int         @id @default(autoincrement())
-  judul         String
-  dosenId       Int?
-  dosen         Dosen?      @relation(fields: [dosenId], references: [id])
-  deskripsi     String
-  lampiran      String
-  dueDate       DateTime
-  topik         String
+  id        Int      @id @default(autoincrement())
+  judul     String
+  dosenId   Int?
+  dosen     Dosen?   @relation(fields: [dosenId], references: [id])
+  matkulId  Int
+  matkul    Matkul   @relation(fields: [matkulId], references: [id])
+  deskripsi String
+  lampiran  String
+  dueDate   DateTime
+  topik     String
+
   statusTugasId Int
   statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
 
@@ -164,6 +180,7 @@ model Tugas {
 model Jawaban {
   jawabanId        Int          @id @default(autoincrement())
   lampiranJawaban  String
+  linkUrl          String?
   WaktuPengumpulan DateTime
   point            Int?
   Tugas            Tugas        @relation(fields: [TugasID], references: [id])

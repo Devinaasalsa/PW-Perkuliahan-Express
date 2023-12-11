@@ -101,8 +101,8 @@ class TugasController {
   }
 
   async createTugas(req, res) {
-    const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } =
-      req.body;
+    const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } = req.body;
+    const matkulId = parseInt(req.params.matkulId);
     console.log(image);
     console.log(req.files);
 
@@ -122,6 +122,11 @@ class TugasController {
               id: parseInt(dosenId),
             },
           },
+          matkul: {
+            connect: {
+                id: matkulId,
+            },
+        },
           deskripsi,
           lampiran: req.files[0].filename,
           dueDate: new Date(dueDate).toISOString(),
@@ -132,6 +137,9 @@ class TugasController {
             },
           },
         },
+        include: {
+          dosen: true
+        }
       });
       res.json(tugass);
     } catch (error) {
@@ -142,6 +150,7 @@ class TugasController {
         .json({ error: "Terjadi kesalahaan saat menambahkan tugas" });
     }
   }
+
 
   async updateTugas(req, res) {
     const { judul, dosenId, deskripsi, image, dueDate, topik } = req.body;
@@ -203,92 +212,95 @@ class TugasController {
 
   async kumpulkanTugas(req, res) {
     const { tugasId } = req.params;
-    const { namaMahasiswa } = req.body;
-    // const userId = req.user.userId;
+    const { namaMahasiswa, linkUrl  } =
+    req.body;
+  // const userId = req.user.userId;
 
-    const existingTugas = await prisma.tugas.findUnique({
+  const existingTugas = await prisma.tugas.findUnique({
+    where: {
+      id: parseInt(tugasId),
+    },
+  });
+
+  if (!existingTugas) {
+    return res.status(404).json({ error: "Tugas not found" });
+  }
+
+  try {
+    const user = await prisma.user.findFirst({
       where: {
-        id: parseInt(tugasId),
+        username: namaMahasiswa,
+      },
+      include: {
+        mahasiswa: true,
+      },
+    });
+      
+      console.log(user
+      );
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: "Mahasiswa data not found for the logged-in user" });
+    }
+
+    const mahasiswaId = user.mhsId;
+    // const userId = user.id;
+
+    console.log("TugasID:", existingTugas.id);
+    console.log("MahasiswaID:", mahasiswaId);
+      
+    const waktuPengumpulan = new Date().toISOString();
+      const now = new Date().getTime();
+      let statusTugas 
+    let message
+    console.log(existingTugas.dueDate.getTime())
+    console.log(now)
+      if (existingTugas.dueDate.getTime() > now) {
+          statusTugas = 2 // <- isi dengan status tugas tepat waktu
+          message = "Mahasiswa mengumpulkan tepat waktu"
+      } else if (existingTugas.dueDate.getTime() < now) {
+          statusTugas = 3 // <- isi dengan status tugas telat
+          message = "Mahasiswa telat mengumpulkan tugas"
+      }
+
+    // Update tugasSiswa
+    const jawaban = await prisma.jawaban.create({
+      data: {
+        lampiranJawaban: req.files[0].filename,
+        WaktuPengumpulan: waktuPengumpulan,
+        linkUrl: linkUrl,
+        Tugas: {
+          connect: {
+            id: existingTugas.id,
+          },
+            },
+        
+        Mahasiswa: {
+          connect: {
+            id: mahasiswaId,
+          },
+            },
+            statusTugas: {
+                connect: {
+                id: statusTugas
+            }
+        }
       },
     });
 
-    if (!existingTugas) {
-      return res.status(404).json({ error: "Tugas not found" });
-    }
-
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          username: namaMahasiswa,
-        },
-        include: {
-          mahasiswa: true,
-        },
-      });
-
-      console.log(user);
-
-      if (!user) {
-        return res
-          .status(404)
-          .json({ error: "Mahasiswa data not found for the logged-in user" });
-      }
-
-      const mahasiswaId = user.mhsId;
-      // const userId = user.id;
-
-      console.log("TugasID:", existingTugas.id);
-      console.log("MahasiswaID:", mahasiswaId);
-
-      const waktuPengumpulan = new Date().toISOString();
-      const now = new Date().getTime();
-      let statusTugas
-      let message
-      console.log(existingTugas.dueDate.getTime())
-      console.log(now)
-      if (existingTugas.dueDate.getTime() > now) {
-        statusTugas = 2 // <- isi dengan status tugas tepat waktu
-        message = "Mahasiswa mengumpulkan tepat waktu"
-      } else if (existingTugas.dueDate.getTime() < now) {
-        statusTugas = 3 // <- isi dengan status tugas telat
-        message = "Mahasiswa telat mengumpulkan tugas"
-      }
-
-      // Update tugasSiswa
-      const jawaban = await prisma.jawaban.create({
-        data: {
-          lampiranJawaban: req.files[0].filename,
-          WaktuPengumpulan: waktuPengumpulan,
-          Tugas: {
-            connect: {
-              id: existingTugas.id,
-            },
-          },
-
-          Mahasiswa: {
-            connect: {
-              id: mahasiswaId,
-            },
-          },
-          statusTugas: {
-            connect: {
-              id: statusTugas
-            }
-          }
-        },
-      });
-
       res.status(200).json({
-        data: jawaban,
-        message
-      });
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ error: "Terjadi kesalahan saat mengumpulkan tugas" });
-    }
+          data: jawaban,
+          message
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "Terjadi kesalahan saat mengumpulkan tugas" });
   }
+}
 
   async getTugasKumpulkanById(req, res) {
     const { tugasId } = req.params;
@@ -307,6 +319,27 @@ class TugasController {
         return res.status(404).json({ error: "Tugas not found" });
       }
 
+      // Mendapatkan data pengumpulan tugas terkait (jika ada)
+      const kumpulanTugas = await prisma.jawaban.findFirst({
+        where: {
+          TugasID: tugas.id,
+        },
+      });
+
+      console.log(kumpulanTugas)
+
+      let message = "Mahasiswa belum mengumpulkan tugas";
+      if (kumpulanTugas) {
+        if (kumpulanTugas.statusTugasId === 2) {
+          message = "Mahasiswa mengumpulkan tepat waktu";
+        } else if (kumpulanTugas.statusTugasId === 3) {
+          message = "Mahasiswa telat mengumpulkan tugas";
+        }
+      }
+
+      // Menambahkan pesan ke objek tugas
+      tugas.message = message;
+
       res.status(200).json(tugas);
     } catch (error) {
       console.log(error);
@@ -323,7 +356,26 @@ class TugasController {
         },
       });
 
-      res.status(200).json(allTugas);
+      // Loop melalui semua tugas dan tambahkan properti "message" pada setiap tugas
+      const tugasWithMessages = allTugas.map((tugas) => {
+        let message = "Mahasiswa belum mengumpulkan tugas";
+        if (tugas.Jawaban && tugas.Jawaban.length > 0) {
+          const kumpulanTugas = tugas.Jawaban[0]; // Menggunakan jawaban pertama sebagai contoh
+          if (kumpulanTugas.statusTugasId === 2) {
+            message = "Mahasiswa mengumpulkan tepat waktu";
+          } else if (kumpulanTugas.statusTugasId === 3) {
+            message = "Mahasiswa telat mengumpulkan tugas";
+          }
+        }
+
+        // Tambahkan properti "message" pada objek tugas
+        return {
+          ...tugas,
+          message: message,
+        };
+      });
+
+      res.status(200).json(tugasWithMessages);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Terjadi kesalahan saat mengambil data semua tugas" });
@@ -332,37 +384,4 @@ class TugasController {
 }
 
 
-
-
-// Check if dueDate has passed and tugasSiswa is still null, then update statusTugasId to 3
-// const currentDate = new Date();
-// const dueDate = new Date(existingTugas.dueDate);
-// console.log("Due Date:", dueDate);
-// console.log("Current Date:", currentDate);
-
-// if (dueDate < currentDate && updatedTugas.tugasSiswa === null) {
-//     console.log("Updating Status to 3");
-//     const overdueStatus = await prisma.tugas.update({
-//         where: { id: parseInt(id) },
-//         data: {
-//             statusTugasId: 3,
-//         },
-//     });
-// } else if (updatedTugas.tugasSiswa !== null) {
-//     console.log("Updating Status to 2");
-//     const updatedStatus = await prisma.tugas.update({
-//         where: { id: parseInt(id) },
-//         data: {
-//             statusTugasId: 2,
-//         },
-//     });
-// } else {
-//     console.log("Updating Status to 1");
-//     const nullStatus = await prisma.tugas.update({
-//         where: { id: parseInt(id) },
-//         data: {
-//             statusTugasId: 1,
-//         },
-//     });
-// }
 module.exports = TugasController;
