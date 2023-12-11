@@ -101,8 +101,8 @@ class TugasController {
   }
 
   async createTugas(req, res) {
-    const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } =
-      req.body;
+    const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } = req.body;
+    const matkulId = parseInt(req.params.matkulId);
     console.log(image);
     console.log(req.files);
 
@@ -122,6 +122,11 @@ class TugasController {
               id: parseInt(dosenId),
             },
           },
+          matkul: {
+            connect: {
+                id: matkulId,
+            },
+        },
           deskripsi,
           lampiran: req.files[0].filename,
           dueDate: new Date(dueDate).toISOString(),
@@ -145,6 +150,7 @@ class TugasController {
         .json({ error: "Terjadi kesalahaan saat menambahkan tugas" });
     }
   }
+
 
   async updateTugas(req, res) {
     const { judul, dosenId, deskripsi, image, dueDate, topik } = req.body;

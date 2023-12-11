@@ -1,4 +1,4 @@
-  // This is your Prisma schema file,
+// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -96,6 +96,7 @@ model Matkul {
   jmlSks     Int
   semester   Int
   dosen      Dosen[]
+  Tugas      Tugas[]
   createdAt  DateTime @default(now())
   updateAt   DateTime @updatedAt()
 }
@@ -155,14 +156,17 @@ model NilaiAkhir {
 }
 
 model Tugas {
-  id            Int         @id @default(autoincrement())
-  judul         String
-  dosenId       Int?
-  dosen         Dosen?      @relation(fields: [dosenId], references: [id])
-  deskripsi     String
-  lampiran      String
-  dueDate       DateTime
-  topik         String
+  id        Int      @id @default(autoincrement())
+  judul     String
+  dosenId   Int?
+  dosen     Dosen?   @relation(fields: [dosenId], references: [id])
+  matkulId  Int
+  matkul    Matkul   @relation(fields: [matkulId], references: [id])
+  deskripsi String
+  lampiran  String
+  dueDate   DateTime
+  topik     String
+
   statusTugasId Int
   statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
 
@@ -192,5 +196,3 @@ model StatusTugas {
   tugas       Tugas[]
   Jawaban     Jawaban[]
 }
-
-

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 
 
-  class LoginController {
+  class AuthController {
       async LoginMahasiswaDosen(req, res) {
         const { username, password } = req.body;
 
@@ -24,10 +24,13 @@ const jwt = require('jsonwebtoken');
 
     if (!passwordMatch) {
       return res.status(401).json({ error: "Kesalahan Kredensial, password tidak sesuai" });
-    }
-    // return console.log(user);
+      }
+      
     // Buat token JWT
-    const token = jwt.sign({ username: user.username, userId: user.id, role: user.role.roleName, mhsId: user.mhsId }, "secret_key");
+      const token = jwt.sign({ username: user.username, userId: user.id, role: user.role.roleName, mhsId: user.mhsId },
+        "secret_key",
+      {expiresIn: '1h'}
+      );
 
     res.json({
       statuscode: 200,
@@ -73,11 +76,41 @@ const jwt = require('jsonwebtoken');
           res.status(500).json({ message: 'Terjadi kesalahan internal' });
           console.log(error);
       }
-  }
+    }
+    
+    // Logout
+    async logout(req, res) {
+      const { token } = req.headers["authorization"];
+    
+      try {
+        const decodedToken = jwt.verify(token, "secret_key");
+    
+        // Check if the token is expired
+        const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
+        jwt.destroy(decodedToken)
+
+    
+        if (isTokenExpired) {
+          // Revoke token (setel status revoked menjadi true)
+          await prisma.token.update({
+            where: { value: token },
+            data: { revoked: true },
+          });
+    
+          res.json({ statuscode: 200, message: "Logout berhasil" });
+        } else {
+          res.status(400).json({ message: "Token masih berlaku, tidak dapat logout" });
+        }
+      } catch (error) {
+        res.status(401).json({ message: "Invalid token" });
+        console.log(isTokenExpired)
+      }
+    }
+    
 
   
 }
 
 
 
-module.exports = LoginController;
+module.exports = AuthController;
