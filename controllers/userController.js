@@ -87,6 +87,18 @@ class UserController {
       }
     }
   }
+
+  async getAllUser(req, res) {
+    try {
+      const users = await prisma.user.findMany();
+      res.status(200).json(users);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat menampilkan data User", error);
+      res
+        .status(500)
+        .json({ error: "Terjadi kesalahan saat menampilkan data User" });
+    }
+  }
 }
 
 module.exports = UserController;

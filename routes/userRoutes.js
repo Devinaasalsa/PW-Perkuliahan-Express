@@ -9,5 +9,6 @@ const userController = new UserController();
 
 
 router.post('/uploadExcelUser', userController.uploadExcelUser)
+router.get('/getAllUser', userController.getAllUser)
 
 module.exports = router;
