@@ -16,7 +16,7 @@ const app = express();
 // ... other middleware setup
 
 // Use the routes
-app.use('/api/v1', 
+app.use('/', 
 absensiRoutes, 
 userRoutes, 
 tugasRoutes, 
