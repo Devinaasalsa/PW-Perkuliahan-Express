@@ -78,6 +78,7 @@ model Mahasiswa {
   id           Int       @id @default(autoincrement())
   mhsName      String
   nim          String    @unique
+  tempatLahir  String
   tanggalLahir String
   alamat       String
   absensi      Absensi[]

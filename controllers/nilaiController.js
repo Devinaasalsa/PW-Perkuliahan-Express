@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 class NilaiController {
     async getNilai(req, res) {
     try {
-        const nilaiAkhir = await prisma.nilai.findMany();
+        const nilaiAkhir = await prisma.nilaiAkhir.find();
         res.status(200).json(nilaiAkhir);
     } catch (error) {
         console.error("Terjadi kesalahan saat menampilkan data Nilai", error);
@@ -85,55 +85,6 @@ class NilaiController {
         console.error("Terjadi kesalahan saat menghitung nilai", error);
         res.status(500).json({ error: "Terjadi kesalahan saat menghitung nilai" });
       }
-    }
-    
-      
-
-    async getMahasiswaById(req, res) {
-        const {id} = req.params;
-        try {
-            const mahasiswas = await prisma.mahasiswa.findFirst({
-                where: {
-                    id: parseInt(id),
-                },
-            });
-            if (!mahasiswas) {
-                return res.json(400).json({error: "Mahasiswa tidak ditemukan"});
-            }
-            res.json(mahasiswas);
-        }catch (error) {
-            console.log(error);
-            res.status(500).json({error: "Terjadi kesalahan saat menampilkan data mahasiswa"})
-        }
-    }
-
-    async updateMahasiswa(req, res){
-        const { mhsName, nim } = req.body;
-        const { id } = req.params;
-        try {
-            const mahasiswas = await prisma.mahasiswa.update({
-                where: {id:parseInt(id)},
-                data: {mhsName, nim}
-            })
-            res.status(200).json(mahasiswas);
-        }catch(error) {
-            console.log(error)
-            res.status(500).json({ error: "Terjadi kesalahan saat update data mahasiswa" });
-        }
-    }
-
-    async deleteMahasiswa (req, res) {
-        const {id} = req.params;
-
-        try {
-            const mahasiswas = await prisma.mahasiswa.delete({
-                where: {id:parseInt(id)},
-            })
-            res.status(200).json(mahasiswas);
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({ error: "Terjadi kesalahan saat menghapus data mahasiswa" });
-          }
     }
 
 };

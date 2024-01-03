@@ -28,6 +28,7 @@
     "prisma": "^5.4.2"
   },
   "devDependencies": {
+    "@types/multer": "^1.4.11",
     "@types/node": "^20.8.10",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
