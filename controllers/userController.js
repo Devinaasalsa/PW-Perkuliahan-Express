@@ -90,7 +90,18 @@ class UserController {
 
   async getAllUser(req, res) {
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          username: true,
+          roleId: true,
+          mhsId: true,
+          dosenId: true,
+          adminId: true,
+          createdAt: true,
+          updateAt: true,
+        },
+      });
       res.status(200).json(users);
     } catch (error) {
       console.error("Terjadi kesalahan saat menampilkan data User", error);

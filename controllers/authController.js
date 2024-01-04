@@ -30,8 +30,9 @@ class AuthController {
       const token = jwt.sign({ userId: user.id, role: user.role.roleName, mhsId: user.mhsId }, "secret_key");
 
       res.json({
-        statuscode: 200,
+        statusCode: 200,
         token,
+        userId: user.id,
         role: user.role.roleName,
         username: user.username
 

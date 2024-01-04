@@ -9,11 +9,11 @@ const nilaiRoutes = require('./nilaiRoutes');
 const roleRoutes = require('./roleRoutes');
 const tugasRoutes = require('./tugasRoutes');
 const userRoutes = require('./userRoutes');
+const adminRoutes = require('./adminRoutes');
 
 
 const app = express();
 
-// ... other middleware setup
 
 // Use the routes
 app.use('/', 
@@ -26,7 +26,8 @@ mahasiswaRoutes,
 dosenRoutes, 
 matkulRoutes, 
 nilaiRoutes, 
-roleRoutes
+roleRoutes,
+adminRoutes
 );
 // ... use other routes
 

@@ -3,6 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const path = require("path");
 
 const prisma = new PrismaClient();
+const { jwtDecode } = require('jwt-decode');
 
 class TugasController {
   async getAllTugas(req, res) {
@@ -265,6 +266,10 @@ class TugasController {
           message = "Mahasiswa telat mengumpulkan tugas"
       }
 
+
+      decoded = jwtDecode(token);
+      const mhsId = decoded.mhsId;
+
     // Update tugasSiswa
     const jawaban = await prisma.jawaban.create({
       data: {
@@ -279,7 +284,7 @@ class TugasController {
         
         Mahasiswa: {
           connect: {
-            id: mahasiswaId,
+            id: mhsId,
           },
             },
             statusTugas: {
