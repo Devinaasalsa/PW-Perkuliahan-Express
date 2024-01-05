@@ -10,7 +10,8 @@ const roleRoutes = require('./roleRoutes');
 const tugasRoutes = require('./tugasRoutes');
 const userRoutes = require('./userRoutes');
 const adminRoutes = require('./adminRoutes');
-
+const eventRoutes = require('./listEventRoutes')
+const fileKsr = require('./fileKsrRoutes')
 
 const app = express();
 
@@ -27,7 +28,9 @@ dosenRoutes,
 matkulRoutes, 
 nilaiRoutes, 
 roleRoutes,
-adminRoutes
+adminRoutes,
+eventRoutes,
+fileKsr
 );
 // ... use other routes
 

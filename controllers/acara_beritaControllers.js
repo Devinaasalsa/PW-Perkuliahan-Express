@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 class AcaraBeritaController {
     async getAllAcaraBerita(req, res) {
         try {
-            const acaraBeritas = await prisma.acaraBerita.findMany()
+            const acaraBeritas = await prisma.beritaAcara.findMany()
             res.status(200).json(acaraBeritas)
         } catch (error) {
             console.error("Terjadi kesalah saaat menampilkan data acata berita")
@@ -30,6 +30,23 @@ class AcaraBeritaController {
         } catch (error) {
             console.log(error)
             res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data acara berita" })
+        }
+    }
+
+    async getAcaraDosen(req, res) {
+        try {
+            const loggedInDosenId = req.user.dosenId; // Change this according to your authentication setup
+            const acaraBeritas = await prisma.beritaAcara.findMany({
+                where: {
+                    dosenId: loggedInDosenId
+                }
+            })
+            res.status(200).json(acaraBeritas)
+        } catch (error) {
+            console.error("Terjadi kesalah saaat menampilkan data acata berita")
+            res
+                .status(500)
+                .json({ error: "Terjaid kesalahan saat menampilkan data acara berita" })
         }
     }
 

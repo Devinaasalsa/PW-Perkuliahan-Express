@@ -8,6 +8,8 @@ const { jwtDecode } = require('jwt-decode');
 class FileKsrController {
     async uploadKsrMahasiswa(req, res) {
         const authHeader = req.header('Authorization');
+        const { ksrId } = req.params;
+
 
         if (!authHeader) {
             return res.status(401).json({ message: 'Authorization header not provided' });
@@ -18,7 +20,7 @@ class FileKsrController {
         const token = tokenParts[1];
         let decoded;
 
-        const { ksrId } = req.params;
+        console.log(ksrId)
         const existingKsr = await prisma.fileKsr.findUnique({
             where: {
                 id: parseInt(ksrId),

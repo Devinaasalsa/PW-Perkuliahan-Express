@@ -218,3 +218,15 @@ model KsrMahasiswa {
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt()
 }
+
+model ListEvent {
+  id         Int      @id @default(autoincrement())
+  eventName  String
+  places     String
+  status     String
+  start_date DateTime
+  end_date   DateTime
+  file       String
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt()
+}
