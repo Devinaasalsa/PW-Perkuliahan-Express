@@ -1,5 +1,6 @@
 const express = require('express');
 const DosenController = require('../controllers/dosenController');
+const MiddlewareAdmin = require('../middleware/middlewareAdmin');
 const MiddlewareDosen = require('../middleware/middlewareDosen');
 const MiddlewareAdmin = require('../middleware/middlewareAdmin');
 
