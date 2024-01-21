@@ -6,23 +6,32 @@ const bcrypt = require('bcrypt')
 
 
 class DosenController {
-    async getAllDosen(req, res) {
+  async getAllDosen(req, res) {
     try {
-        const dosens = await prisma.dosen.findMany({
-            include: {
-                matkul: true
-            }
-        });
-        res.json({
-          statusCode: 200,
-          dosens});
+      const dosens = await prisma.dosen.findMany({
+        include: {
+          matkul: true
+        }
+      });
+  
+      const dosensData = dosens.map((dosen) => ({
+        id: dosen.id,
+        nip: dosen.nip,
+        dosenName: dosen.dosenName,
+        matkulName: dosen.matkul ? dosen.matkul.namaMatkul : null
+      }));
+  
+      res.json({
+        statusCode: 200,
+        dosens: dosensData
+      });
+  
     } catch (error) {
-        console.error("Terjadi kesalahan saat menampilkan data dosen", error);
-        res
-          .status(500)
-          .json({ error: "Terjadi kesalahan saat menampilkan data dosen" });
-      }
-}
+      console.error("Terjadi kesalahan saat menampilkan data dosen", error);
+      res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data dosen" });
+    }
+  }
+  
 
     async getDosenById(req, res) {
         const {id} = req.params;
@@ -110,6 +119,12 @@ class DosenController {
             });
           }
       
+          const matkul = await prisma.matkul.findUnique({
+            where: {
+              id: matkulId
+            },
+          })
+
           // Buat dosen
           const dosen = await prisma.dosen.create({
             data: {
@@ -119,10 +134,11 @@ class DosenController {
                 connect: {
                   id: matkulId
                 }
-              }
+              },
+              
             },
           });
-      
+          
           // Buat user
           const hashedPassword = await bcrypt.hash(nip, 10); // You can adjust the salt rounds as needed
           const user = await prisma.user.create({
@@ -138,7 +154,11 @@ class DosenController {
 
           res.json({
             statusCode: 200,
-            dosen});
+            id: dosen.id,
+            nip: dosen.nip,
+            dosenName: dosen.dosenName,
+            matkulName: matkul.namaMatkul
+          });
         } catch (error) {
           console.error("Terjadi kesalahan saat menambahkan data Dosen", error);
           res.status(500).json({ error: "Terjadi kesalahan saat menambahkan data Dosen" });
