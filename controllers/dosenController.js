@@ -10,22 +10,20 @@ class DosenController {
     try {
       const dosens = await prisma.dosen.findMany({
         include: {
-          matkul: true
+          matkul: {
+            select: {
+            id: true,
+            namaMatkul: true
+          }
         }
+      }
       });
-  
-      const dosensData = dosens.map((dosen) => ({
-        id: dosen.id,
-        nip: dosen.nip,
-        dosenName: dosen.dosenName,
-        matkulName: dosen.matkul ? dosen.matkul.namaMatkul : null
-      }));
   
       res.json({
         statusCode: 200,
-        dosens: dosensData
+        dosens,
+        
       });
-  
     } catch (error) {
       console.error("Terjadi kesalahan saat menampilkan data dosen", error);
       res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data dosen" });
@@ -42,7 +40,12 @@ class DosenController {
           id: parseInt(id),
         },
         include: {
-          matkul: true,
+          matkul: {
+            select: {
+            id: true,
+            namaMatkul: true
+          }
+        }
         },
       });
   
@@ -52,12 +55,7 @@ class DosenController {
   
       res.json({
         statusCode: 200,
-        dosens: {
-          id: dosen.id,
-          nip: dosen.nip,
-          dosenName: dosen.dosenName,
-          matkulName: dosen.matkul ? dosen.matkul.namaMatkul : null,
-        },
+        dosen
       });
   
     } catch (error) {
