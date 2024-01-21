@@ -31,7 +31,7 @@ class EventController {
                 };
             }
 
-            const event = await prisma.listevent.findMany({
+            const event = await prisma.listEvent.findMany({
                 where: {
                     OR: [searchCondition],
                 },
