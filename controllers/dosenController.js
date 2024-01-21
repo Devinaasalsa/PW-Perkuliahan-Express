@@ -176,12 +176,16 @@ class DosenController {
         }
       }
     async updateDosen(req, res){
-        const { dosenName } = req.body;
+        const { dosenName, nip, matkulId } = req.body;
         const { id } = req.params;
         try {
             const dosens = await prisma.dosen.update({
                 where: {id:parseInt(id)},
-                data: {dosenName}
+                data: {
+                  nip,
+                  dosenName, 
+                  matkulId,
+              }
             })
             res.status(200).json({
               statusCode: 200,
