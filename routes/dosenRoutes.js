@@ -10,10 +10,10 @@ const middlewareAdmin = new MiddlewareAdmin();
 
 // Define Dosen routes
 router.get('/getDosen', middlewareAdmin.isAdmin, dosenController.getAllDosen);
-router.get('/getDosenById/:id', middlewareDosen.isDosen, dosenController.getDosenById);
-router.post('/createDosen', dosenController.createDosen);
-router.patch('/updateDosen/:id', middlewareDosen.isDosen, dosenController.updateDosen);
-router.delete('/deleteDosen/:id', middlewareDosen.isDosen, dosenController.deleteDosen);
+router.get('/getDosen/:id', dosenController.getDosenById);
+router.post('/createDosen', middlewareAdmin.isAdmin, dosenController.createDosen);
+router.patch('/updateDosen/:id', middlewareAdmin.isAdmin, dosenController.updateDosen);
+router.delete('/deleteDosen/:id', middlewareAdmin.isAdmin, dosenController.deleteDosen);
 router.get('/searchDosen', dosenController.searchDosen);
 
 module.exports = router;

@@ -13,7 +13,9 @@ class DosenController {
                 matkul: true
             }
         });
-        res.status(200).json(dosens);
+        res.json({
+          statusCode: 200,
+          dosens});
     } catch (error) {
         console.error("Terjadi kesalahan saat menampilkan data dosen", error);
         res
@@ -34,7 +36,9 @@ class DosenController {
             if (!dosens) {
                 return res.json(400).json({error: "Data dosen tidak ditemukan"});
             }
-            res.json(dosens);
+            res.json({
+              statusCode: 200,
+              dosens});
         }catch (error) {
             console.log(error);
             res.status(500).json({error: "Terjadi kesalahan saat menampilkan data dosen"})
@@ -132,7 +136,9 @@ class DosenController {
           });
 
 
-          res.json(dosen);
+          res.json({
+            statusCode: 200,
+            dosen});
         } catch (error) {
           console.error("Terjadi kesalahan saat menambahkan data Dosen", error);
           res.status(500).json({ error: "Terjadi kesalahan saat menambahkan data Dosen" });
@@ -146,7 +152,9 @@ class DosenController {
                 where: {id:parseInt(id)},
                 data: {dosenName}
             })
-            res.status(200).json(dosens);
+            res.status(200).json({
+              statusCode: 200,
+              dosens});
         }catch(error) {
             console.log(error)
             res.status(500).json({ error: "Terjadi kesalahan saat update data dosen" });
@@ -160,7 +168,9 @@ class DosenController {
             const dosens = await prisma.dosen.delete({
                 where: {id:parseInt(id)},
             })
-            res.status(200).json(dosens);
+            res.status(200).json({
+              statusCode: 200,
+              dosens});
         } catch (error) {
             console.log(error)
             res.status(500).json({ error: "Terjadi kesalahan saat menghapus data dosen" });
