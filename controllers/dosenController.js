@@ -33,26 +33,39 @@ class DosenController {
   }
   
 
-    async getDosenById(req, res) {
-        const {id} = req.params;
-        try {
-            const dosens = await prisma.dosen.findFirst({
-                where: {
-                    id: parseInt(id),
-                },
-                
-            });
-            if (!dosens) {
-                return res.json(400).json({error: "Data dosen tidak ditemukan"});
-            }
-            res.json({
-              statusCode: 200,
-              dosens});
-        }catch (error) {
-            console.log(error);
-            res.status(500).json({error: "Terjadi kesalahan saat menampilkan data dosen"})
-        }
+  async getDosenById(req, res) {
+    const { id } = req.params;
+  
+    try {
+      const dosen = await prisma.dosen.findFirst({
+        where: {
+          id: parseInt(id),
+        },
+        include: {
+          matkul: true,
+        },
+      });
+  
+      if (!dosen) {
+        return res.status(400).json({ error: "Data dosen tidak ditemukan" });
+      }
+  
+      res.json({
+        statusCode: 200,
+        dosens: {
+          id: dosen.id,
+          nip: dosen.nip,
+          dosenName: dosen.dosenName,
+          matkulName: dosen.matkul ? dosen.matkul.namaMatkul : null,
+        },
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data dosen" });
     }
+  }
+  
 
     async searchDosen(req, res) {
       const { dosenName, nip } = req.query;

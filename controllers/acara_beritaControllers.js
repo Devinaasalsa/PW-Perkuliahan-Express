@@ -5,7 +5,22 @@ const prisma = new PrismaClient()
 class AcaraBeritaController {
     async getAllAcaraBerita(req, res) {
         try {
-            const acaraBeritas = await prisma.beritaAcara.findMany()
+            const acaraBeritas = await prisma.beritaAcara.findMany({
+                include: {
+                    dosen: true,
+                }
+            })
+
+            const acaraBeritaData = acaraBeritas.map((beritaAcara) => ({
+                id: beritaAcara.id,
+                dosenName: acaraBeritaData,
+                pertemuanKe: beritaAcara.pertemuanKe,
+                date: beritaAcara.date,
+                jamMasuk: beritaAcara.jamMasuk,
+                jamKeluar: beritaAcara.jamKeluar,
+                descMateri: beritaAcara.descMateri,
+                jmlMhsHadir: beritaAcara.jmlMhsHadir
+            }));
             res.status(200).json({
                 statusCode: 200,
                 acaraBeritas
