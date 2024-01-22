@@ -33,6 +33,9 @@ class AuthController {
         statusCode: 200,
         token,
         userId: user.id,
+        dosenId: user.dosenId,
+        adminId: user.adminId,
+        mahasiswaId: user.mhsId,
         role: user.role.roleName,
         username: user.username
 
