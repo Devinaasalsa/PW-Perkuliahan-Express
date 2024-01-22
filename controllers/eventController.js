@@ -107,7 +107,11 @@ class EventController {
             const events = await prisma.listEvent.delete({
                 where: { id: parseInt(id) },
             })
-            res.status(200).json(events);
+            res.status(200).json(
+                {
+                    statusCode:200,
+                message: "Sukses meghapus data Mahasiswa",
+                events});
         } catch (error) {
             console.log(error)
             res.status(500).json({ error: "Terjadi kesalahan saat menghapus data event" });
