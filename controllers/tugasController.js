@@ -9,7 +9,22 @@ class TugasController {
   async getAllTugas(req, res) {
     try {
       const now = new Date().toISOString();
-      const tugass = await prisma.tugas.findMany();
+      const tugass = await prisma.tugas.findMany({
+        include: {
+          matkul: {
+            select: {
+            id: true,
+            namaMatkul: true
+          }
+        },
+        dosen: {
+          select: {
+            id: true,
+            dosenName: true
+          }
+        },
+      }
+      });
 
       // Update statusTugasId for each task based on the current date
       const updatedTugass = await Promise.all(
@@ -35,7 +50,10 @@ class TugasController {
         })
       );
 
-      res.status(200).json(updatedTugass);
+      res.status(200).json({
+        statusCode: 200,
+        updatedTugass
+      });
     } catch (error) {
       console.error("Terjadi kesalahan saat menampilkan data tugas");
       res.status(500).json({
@@ -74,13 +92,85 @@ class TugasController {
         },
       });
 
-      res.status(200).json(tugas);
+      res.status(200).json({
+        statusCode: 200,
+        tugas
+      });
     } catch (error) {
       console.error("Terjadi kesalahan saat mencari Tugas", error);
       res.status(500).json({ error: "Terjadi kesalahan saat mencari Tugas" });
     }
   }
 
+  //buat get topik tugas sesuai mata kuliah
+  async getTugasByMatkul(req, res) {
+    const { matkulId } = req.params;
+    try {
+      const tugass = await prisma.tugas.findMany({
+        where: {
+          matkulId: parseInt(matkulId),
+        },
+        
+          include: {
+            matkul: {
+              select: {
+              id: true,
+              namaMatkul: true
+            }
+          },
+          dosen: {
+            select: {
+              id: true,
+              dosenName: true
+            }
+          },
+        
+        }
+      });
+      res.status(200).json(tugass);
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ error: "Terjadi kesalahan saat menampilkan data tugas " });
+    }
+  }
+
+  //get tugas sesuai topik yang dipilih
+  async getTugasByTopik(req, res) {
+    const { topik } = req.query;
+    try {
+      const tugass = await prisma.tugas.findMany({
+        where: {
+          topik: topik
+        },
+        
+          include: {
+            matkul: {
+              select: {
+              id: true,
+              namaMatkul: true
+            }
+          },
+          dosen: {
+            select: {
+              id: true,
+              dosenName: true
+            }
+          },
+        
+        }
+      });
+      res.status(200).json(tugass);
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ error: "Terjadi kesalahan saat menampilkan data tugas " });
+    }
+  }
+
+  //buat get detail tugas (desc, lampiran, dll)
   async getTugasById(req, res) {
     const { id } = req.params;
     try {
@@ -88,6 +178,22 @@ class TugasController {
         where: {
           id: parseInt(id),
         },
+        
+          include: {
+            matkul: {
+              select: {
+              id: true,
+              namaMatkul: true
+            }
+          },
+          dosen: {
+            select: {
+              id: true,
+              dosenName: true
+            }
+          },
+        
+        }
       });
       if (!tugass) {
         return jes.json(400).json({ error: "Tugas tidak di temukan" });
@@ -105,6 +211,7 @@ class TugasController {
     const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } = req.body;
     const matkulId = parseInt(req.params.matkulId);
     console.log(image);
+    console.log(judul, "juddul");
     console.log(req.files);
 
     try {
@@ -117,7 +224,6 @@ class TugasController {
 
       const tugass = await prisma.tugas.create({
         data: {
-          judul,
           dosen: {
             connect: {
               id: parseInt(dosenId),
@@ -129,6 +235,7 @@ class TugasController {
             },
         },
           deskripsi,
+          judul,
           lampiran: req.files[0].filename,
           dueDate: new Date(dueDate).toISOString(),
           topik,

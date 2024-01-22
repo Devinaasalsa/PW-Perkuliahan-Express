@@ -109,6 +109,18 @@ class FileKsrController {
 
     }
 
-}
+    async getFile(req, res) {
+        try {
+            const files = await prisma.ksrMahasiswa.findMany();
+            res.status(200).json(files);
+          } catch (error) {
+            console.error("Terjadi kesalahan saat menampilkan file", error);
+            res
+              .status(500)
+              .json({ error: "Terjadi kesalahan saat menampilkan file" });
+          }
+        }
+    }
+
 
 module.exports = FileKsrController;

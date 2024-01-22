@@ -9,7 +9,8 @@ const middlewareDosen = new MiddlewareDosen();
 const middlewareMahasiswa = new MiddlewareMahasiswa();
 
 
-router.post('/addFile', middlewareDosen.isDosen, KsrController.addFile);
+router.get('/getFileKsr', KsrController.getFile);
+router.post('/addFile', KsrController.addFile);
 router.post('/uploadKsrMahasiswa/:ksrId',  middlewareMahasiswa.isMahasiswa, KsrController.uploadKsrMahasiswa);
 
 module.exports = router;
