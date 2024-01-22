@@ -169,6 +169,7 @@ model Tugas {
   dueDate   String
   topik     String @unique
 
+
   statusTugasId Int
   statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
 

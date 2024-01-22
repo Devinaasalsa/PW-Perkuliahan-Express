@@ -7,7 +7,16 @@ const prisma = new PrismaClient();
 class MatkulController {
   async getAllMatkul(req, res) {
     try {
-      const matkuls = await prisma.matkul.findMany();
+      const matkuls = await prisma.matkul.findMany({
+        include: {
+          dosen: {
+            select: {
+              id: true,
+              dosenName: true
+            }
+          },
+        }
+      });
       res.status(200).json(matkuls);
     } catch (error) {
       console.error("Terjadi kesalahan saat menampilkan data Mata Kuliah", error);
@@ -34,6 +43,36 @@ class MatkulController {
       res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data Mata kuliah" })
     }
   }
+
+  async getMatkulByDosen(req, res) {
+    const { dosenId } = req.query;
+    
+    try {
+      const matkuls = await prisma.matkul.findMany({
+        where: {
+          dosen: {
+            some: {
+              id: parseInt(dosenId)
+            }
+          }
+        },
+        include: {
+          dosen: {
+            select: {
+              id: true,
+              dosenName: true
+            }
+          }
+        }
+      });
+  
+      res.status(200).json(matkuls);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data matkul" });
+    }
+  }
+  
 
   async searchMatkul(req, res) {
     const { code, namaMatkul } = req.query;

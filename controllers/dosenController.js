@@ -132,7 +132,7 @@ class DosenController {
       
           const matkul = await prisma.matkul.findUnique({
             where: {
-              id: matkulId
+              id: parseInt(matkulId)
             },
           })
 
@@ -143,7 +143,7 @@ class DosenController {
               nip,
               matkul: {
                 connect: {
-                  id: matkulId
+                  id: parseInt(matkulId)
                 }
               },
               
@@ -168,6 +168,7 @@ class DosenController {
             id: dosen.id,
             nip: dosen.nip,
             dosenName: dosen.dosenName,
+            matkulId: matkul.id,
             matkulName: matkul.namaMatkul
           });
         } catch (error) {
