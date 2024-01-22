@@ -9,7 +9,7 @@ const middlewareDosen = new MiddlewareDosen();
 router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
 router.get('/getTugasByMatkul/:matkulId', tugasController.getTugasByMatkul)
-router.get('/getTugasByTopik?', tugasController.getTugasByTopik)
+router.get('/getTugasByTopik?', tugasController.getTugasByTopik);
 
 
 router.post('/createTugas/:matkulId', middlewareDosen.isDosen, tugasController.createTugas)
