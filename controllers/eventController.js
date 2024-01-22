@@ -58,8 +58,8 @@ class EventController {
                     eventName, 
                     places, 
                     status, 
-                    start_date, 
-                    end_date, 
+                    start_date,
+                    end_date,
                     file: req.files[0].filename,
 
                 },

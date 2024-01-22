@@ -12,5 +12,6 @@ router.post('/createEvent', middlewareAdmin.isAdmin, eventController.createEvent
 router.patch('/updateEvent/:id', middlewareAdmin.isAdmin, eventController.updateEvent)
 router.delete('/deleteEvent/:id', middlewareAdmin.isAdmin, eventController.deleteEvent)
 router.get('/searchEvent?', eventController.searchEvent);
+router.get('/tmp/?', eventController.searchEvent);
 
 module.exports = router;
