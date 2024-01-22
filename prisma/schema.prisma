@@ -166,8 +166,8 @@ model Tugas {
   matkul    Matkul   @relation(fields: [matkulId], references: [id])
   deskripsi String
   lampiran  String
-  dueDate   DateTime
-  topik     String
+  dueDate   String
+  topik     String @unique
 
   statusTugasId Int
   statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])

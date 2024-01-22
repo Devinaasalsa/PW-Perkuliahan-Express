@@ -19,7 +19,7 @@ class DosenController {
       }
       });
   
-      res.json({
+      res.status(200).json({
         statusCode: 200,
         dosens,
         
@@ -53,7 +53,7 @@ class DosenController {
         return res.status(400).json({ error: "Data dosen tidak ditemukan" });
       }
   
-      res.json({
+      res.status(200).json({
         statusCode: 200,
         dosen
       });
@@ -163,7 +163,7 @@ class DosenController {
           });
 
 
-          res.json({
+          res.status(200).json({
             statusCode: 200,
             id: dosen.id,
             nip: dosen.nip,
