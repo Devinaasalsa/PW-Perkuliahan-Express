@@ -119,12 +119,12 @@ class MahasiswaController {
     }
   }
   async updateMahasiswa(req, res) {
-    const { mhsName, nim } = req.body;
+    const { mhsName, nim, tempatLahir, tanggalLahir, alamat } = req.body;
     const { id } = req.params;
     try {
       const mahasiswas = await prisma.mahasiswa.update({
         where: { id: parseInt(id) },
-        data: { mhsName, nim }
+        data: { mhsName, nim, tempatLahir, tanggalLahir, alamat }
       })
       res.status(200).json(mahasiswas);
     } catch (error) {
