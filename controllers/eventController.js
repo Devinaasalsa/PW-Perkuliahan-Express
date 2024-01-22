@@ -64,7 +64,10 @@ class EventController {
 
                 },
             });
-            res.json(events);
+            res.status(200).json(
+                {
+                    message: "Sukses membuat data event",
+                    events});
         } catch (error) {
             console.error("Terjadi kesalahan saat menambahkan Event", error);
             res
