@@ -103,6 +103,7 @@ class MahasiswaController {
 
       const users = await prisma.user.create({
         data: {
+
           username: mhsName,
           password: hashedPassword,
           roleId: 3,
@@ -132,26 +133,22 @@ class MahasiswaController {
     }
   }
 
-  async deleteMahasiswa(req, res) {
-    const { id } = req.params;
+  async deleteMahasiswa (req, res) {
+    const {id} = req.params;
 
     try {
-      const mahasiswas = await prisma.mahasiswa.delete({
-        where: { id: parseInt(id) },
-      })
-
-      const mahasiswaId = mahasiswas.id
-      const users = await prisma.user.delete({
-        where: {
-          id: parseInt(mahasiswaId)
-        }
-      })
-      res.status(200).json(mahasiswas);
+        const mahasiswas = await prisma.mahasiswa.delete({
+            where: {id:parseInt(id)},
+        })
+        res.status(200).json({
+          statusCode: 200,
+          mahasiswas});
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ error: "Terjadi kesalahan saat menghapus data mahasiswa" });
-    }
-  }
+        console.log(error)
+        res.status(500).json({ error: "Terjadi kesalahan saat menghapus data mahasiswa" });
+      }
+}
+  
 }
 
 module.exports = MahasiswaController;
