@@ -142,6 +142,7 @@ class MahasiswaController {
         })
         res.status(200).json({
           statusCode: 200,
+          message: "Sukses meghapus data Mahasiswa",
           mahasiswas});
     } catch (error) {
         console.log(error)
