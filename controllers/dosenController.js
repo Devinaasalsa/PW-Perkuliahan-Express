@@ -205,6 +205,7 @@ class DosenController {
             })
             res.status(200).json({
               statusCode: 200,
+              message: "Sukses menghapus data dosen",
               dosens});
         } catch (error) {
             console.log(error)
