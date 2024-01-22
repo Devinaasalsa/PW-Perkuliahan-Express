@@ -40,7 +40,7 @@ class UserController {
             });
             return;
           }
-          console.log(existingNim)
+          console.log(existingNim);
 
           const mahasiswaPromise = await prisma.mahasiswa.create({
             data: {
