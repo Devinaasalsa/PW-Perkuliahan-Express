@@ -239,7 +239,7 @@ class TugasController {
           judul,
           lampiran: req.files[0] ? req.files[0].filename : null,
           link: link || null,
-          dueDate: new Date(dueDate).toISOString(),
+          dueDate,
           topik,
           statusTugas: {
             connect: {
