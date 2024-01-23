@@ -251,7 +251,7 @@ class TugasController {
           dosen: true
         }
       });
-      res.status.json(tugass);
+      res.status(200).json(tugass);
     } catch (error) {
       console.log(error);
       console.error("Terjadi kesalahan saat menambahkan tugas");
