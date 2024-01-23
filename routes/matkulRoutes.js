@@ -13,7 +13,7 @@ const middlewareMahasiswa = new MiddlewareMahasiswa();
 // Define Matkul routes
 router.get('/getMatkul', matkulController.getAllMatkul);
 router.get('/getMatkulById/:id', matkulController.getMatkulById);
-router.get('/getMatkulByDosen?', matkulController.getMatkulByDosen);
+router.get('/getMatkul?', matkulController.getMatkulByDosen);
 
 
 router.post('/createMatkul', matkulController.createMatkul);
