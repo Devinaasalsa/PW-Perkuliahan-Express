@@ -160,12 +160,13 @@ model NilaiAkhir {
 model Tugas {
   id        Int      @id @default(autoincrement())
   judul     String
-  dosenId   Int?
-  dosen     Dosen?   @relation(fields: [dosenId], references: [id])
+  dosenId   Int
+  dosen     Dosen  @relation(fields: [dosenId], references: [id])
   matkulId  Int
   matkul    Matkul   @relation(fields: [matkulId], references: [id])
   deskripsi String
-  lampiran  String
+  lampiran  String?
+  link String?
   dueDate   String
   topik     String @unique
 
