@@ -222,6 +222,15 @@ class TugasController {
       //     message: "Tidak ada file Excel yang diunggah",
       //   });
       // }
+      const requiredFields = ['judul', 'deskripsi', 'dueDate', 'topik', 'dosenId'];
+      const missingFields = requiredFields.filter(field => !req.body[field]);
+
+      if (missingFields.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+        });
+      }
 
       const tugass = await prisma.tugas.create({
         data: {

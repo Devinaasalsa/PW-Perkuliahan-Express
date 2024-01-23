@@ -106,6 +106,17 @@ class DosenController {
     async createDosen(req, res) {
         const { dosenName, matkulId, nip } = req.body;
         try {
+
+          const requiredFields = ['dosenName', 'matkulId', 'nip'];
+          const missingFields = requiredFields.filter(field => !req.body[field]);
+    
+          if (missingFields.length > 0) {
+            return res.status(400).json({
+              success: false,
+              message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+            });
+          }
+
           const existingNip = await prisma.dosen.findUnique({
             where: {
               nip: nip,

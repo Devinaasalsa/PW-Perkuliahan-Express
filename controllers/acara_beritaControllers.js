@@ -78,6 +78,16 @@ class AcaraBeritaController {
         try {
             const { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe } = req.body;
 
+            const requiredFields = ['date', 'jamMasuk', 'jamKeluar', 'descMateri', 'dosenId', 'pertemuanKe'];
+            const missingFields = requiredFields.filter(field => !req.body[field]);
+      
+            if (missingFields.length > 0) {
+              return res.status(400).json({
+                success: false,
+                message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+              });
+            }
+      
             // Menghitung jumlah mahasiswa yang hadir pada pertemuan tertentu
             const countHadir = await prisma.absensi.count({
                 where: {

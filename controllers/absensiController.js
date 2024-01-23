@@ -8,7 +8,6 @@ class AbsensiController {
     try {
       const { pertemuanKe, absensiData } = req.body;
   
-      // Gunakan Promise.all untuk membuat banyak permintaan secara bersamaan
       const absenPromises = absensiData.map(async (data) => {
         const { mahasiswaId, statusId } = data;
   
@@ -36,7 +35,8 @@ class AbsensiController {
           },
         });
   
-        const totalHadir = countHadir;
+        const totalHadir = countHadir + 1;
+        console.log(totalHadir);
   
         const absensi = await prisma.absensi.create({
           data: {

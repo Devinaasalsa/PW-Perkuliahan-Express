@@ -18,7 +18,6 @@ class AdminController {
     }
 }
 
-
     async searchAdmin(req, res) {
         const { adminName} = req.query;
     
@@ -53,6 +52,16 @@ class AdminController {
     async createAdmin(req, res) {
         const { adminName, password } = req.body;
         try {
+            const requiredFields = ['adminName', 'password'];
+            const missingFields = requiredFields.filter(field => !req.body[field]);
+      
+            if (missingFields.length > 0) {
+              return res.status(400).json({
+                success: false,
+                message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+              });
+            }
+      
             const existingName = await prisma.admin.findUnique({
                 where: {
                     adminName: adminName,

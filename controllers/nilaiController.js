@@ -6,8 +6,13 @@ const prisma = new PrismaClient();
 
 class NilaiController {
     async getNilai(req, res) {
+      const { id } = req.params;
     try {
-        const nilaiAkhir = await prisma.nilaiAkhir.find();
+        const nilaiAkhir = await prisma.nilaiAkhir.findFirst({
+          where: {
+            mhsId: parseInt(id),
+          },
+        });
         res.status(200).json(nilaiAkhir);
     } catch (error) {
         console.error("Terjadi kesalahan saat menampilkan data Nilai", error);

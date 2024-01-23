@@ -79,6 +79,16 @@ class MahasiswaController {
   async createMahasiswa(req, res) {
     const { mhsName, nim, tempatLahir, tanggalLahir, alamat } = req.body;
     try {
+      const requiredFields = ['mhsName', 'nim', 'tempatLahir', 'tanggalLahir', 'alamat'];
+      const missingFields = requiredFields.filter(field => !req.body[field]);
+
+      if (missingFields.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+        });
+      }
+
       const existingNim = await prisma.mahasiswa.findUnique({
         where: {
           nim: nim,

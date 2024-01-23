@@ -8,6 +8,6 @@ const middlewareDosen = new MiddlewareDosen();
 
 // Define Nilai routes
 router.post('/inputAllNilai/:id', middlewareDosen.isDosen, nilaiController.sumNilai)
-// router.get('/getNilai/',  nilaiController.getNilai)
+router.get('/getNilai/:id',  nilaiController.getNilai)
 
 module.exports = router;

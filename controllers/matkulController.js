@@ -116,6 +116,16 @@ class MatkulController {
   async createMatkul(req, res) {
     const { code, namaMatkul, jmlSks, semester, dosenId } = req.body;
     try {
+      const requiredFields = ['code', 'namaMatkul', 'jmlSks', 'semester', 'dosenId'];
+      const missingFields = requiredFields.filter(field => !req.body[field]);
+
+      if (missingFields.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+        });
+      }
+
       const existingCode = await prisma.matkul.findUnique({
         where: {
           code: code,

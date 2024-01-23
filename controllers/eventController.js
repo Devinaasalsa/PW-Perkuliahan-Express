@@ -47,6 +47,17 @@ class EventController {
     async createEvent(req, res) {
         const { eventName, places, status, start_date, end_date, file } = req.body;
         try {
+
+            const requiredFields = ['eventName', 'places', 'status', 'start_date', 'end_date'];
+            const missingFields = requiredFields.filter(field => !req.body[field]);
+      
+            if (missingFields.length > 0) {
+              return res.status(400).json({
+                success: false,
+                message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
+              });
+            }
+  
             if (!req.files || !req.files[0]) {
                 return res.status(400).json({
                     success: false,
