@@ -168,7 +168,7 @@ model Tugas {
   lampiran  String?
   link String?
   dueDate   String
-  topik     String @unique
+  topik     String 
 
 
   statusTugasId Int
