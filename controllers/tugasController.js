@@ -210,19 +210,18 @@ class TugasController {
 
 
   async createTugas(req, res) {
-    const { judul, deskripsi, image, dueDate, topik, dosenId, statusTugasId } = req.body;
+    const { judul, deskripsi, image, dueDate, topik, dosenId, link, statusTugasId } = req.body;
     const matkulId = parseInt(req.params.matkulId);
     console.log(image);
-    console.log(judul, "juddul");
     console.log(req.files);
 
     try {
-      if (!req.files || !req.files[0]) {
-        return res.status(400).json({
-          success: false,
-          message: "Tidak ada file Excel yang diunggah",
-        });
-      }
+      // if (!req.files || !req.files[0]) {
+      //   return res.status(400).json({
+      //     success: false,
+      //     message: "Tidak ada file Excel yang diunggah",
+      //   });
+      // }
 
       const tugass = await prisma.tugas.create({
         data: {
@@ -238,7 +237,8 @@ class TugasController {
         },
           deskripsi,
           judul,
-          lampiran: req.files[0].filename,
+          lampiran: req.files[0] ? req.files[0].filename : null,
+          link: link || null,
           dueDate: new Date(dueDate).toISOString(),
           topik,
           statusTugas: {
