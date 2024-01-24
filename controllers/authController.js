@@ -16,14 +16,18 @@ class AuthController {
       const user = await prisma.user.findFirst({ where: { username }, include: { role: true } });
 
       if (!user) {
-        return res.status(401).json({ error: "Kesalahan Kredensial, user tidak ditemukan" });
+        return res.status(401).json({ 
+          statusCode: 401,
+          error: "Kesalahan Kredensial, user tidak ditemukan" });
       }
 
       // Verifikasi password
       const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {
-        return res.status(401).json({ error: "Kesalahan Kredensial, password tidak sesuai" });
+        return res.status(401).json({ 
+          statusCode: 401,
+          error: "Kesalahan Kredensial, password tidak sesuai" });
       }
       // return console.log(user);
       // Buat token JWT
