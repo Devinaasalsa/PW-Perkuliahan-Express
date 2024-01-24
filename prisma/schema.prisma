@@ -88,6 +88,8 @@ model Mahasiswa {
   User         User[]
   NilaiAkhir   NilaiAkhir?
   Jawaban      Jawaban[]
+    assignedTugas Tugas[]
+
   KsrMahasiswa KsrMahasiswa[]
 }
 
@@ -106,13 +108,13 @@ model Matkul {
 model BeritaAcara {
   id          Int      @id @default(autoincrement())
   dosenId     Int
-  pertemuanKe Int
+  pertemuanKe String
   dosen       Dosen    @relation(fields: [dosenId], references: [id])
   date        DateTime
-  jamMasuk    Int
-  jamKeluar   Int
+  jamMasuk    String
+  jamKeluar   String
   descMateri  String
-  jmlMhsHadir Int
+  jmlMhsHadir String
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
@@ -175,6 +177,8 @@ model Tugas {
   statusTugas   StatusTugas @relation(fields: [statusTugasId], references: [id])
 
   Jawaban Jawaban[]
+  assignedMahasiswa Mahasiswa[]
+
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()

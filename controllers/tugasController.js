@@ -216,12 +216,6 @@ class TugasController {
     console.log(req.files);
 
     try {
-      // if (!req.files || !req.files[0]) {
-      //   return res.status(400).json({
-      //     success: false,
-      //     message: "Tidak ada file Excel yang diunggah",
-      //   });
-      // }
       const requiredFields = ['judul', 'deskripsi', 'dueDate', 'topik', 'dosenId'];
       const missingFields = requiredFields.filter(field => !req.body[field]);
 
@@ -255,9 +249,20 @@ class TugasController {
               id: 1,
             },
           },
+          assignedMahasiswa: {
+            connect: {
+              // This assumes that you have a method to retrieve all Mahasiswa IDs
+              id: {
+                in: await prisma.mahasiswa.findMany({
+                  select: { id: true },
+                }),
+              },
+            },
+          }
         },
         include: {
-          dosen: true
+          dosen: true,
+          assignedMahasiswa: true,
         }
       });
 

@@ -76,9 +76,9 @@ class AcaraBeritaController {
 
     async createAcaraBerita(req, res) {
         try {
-            const { date, jamMasuk, jamKeluar, descMateri, dosenId, pertemuanKe } = req.body;
-
-            const requiredFields = ['date', 'jamMasuk', 'jamKeluar', 'descMateri', 'dosenId', 'pertemuanKe'];
+            const { date, jamMasuk, jamKeluar, descMateri, pertemuanKe, jmlMhsHadir } = req.body;
+            const { dosenId } = req.query;
+            const requiredFields = ['date', 'jamMasuk', 'jamKeluar', 'descMateri', 'pertemuanKe', 'jmlMhsHadir'];
             const missingFields = requiredFields.filter(field => !req.body[field]);
       
             if (missingFields.length > 0) {
@@ -89,27 +89,28 @@ class AcaraBeritaController {
             }
       
             // Menghitung jumlah mahasiswa yang hadir pada pertemuan tertentu
-            const countHadir = await prisma.absensi.count({
-                where: {
-                    pertemuanKe: pertemuanKe,
-                    statusId: 1, // ID untuk status "hadir"
-                },
-            });
+            // const countHadir = await prisma.absensi.count({
+            //     where: {
+            //         pertemuanKe: parseInt(pertemuanKe),
+            //         statusId: 1, // ID untuk status "hadir"
+            //     },
+            // });
 
-            const jmlMhsHadir = countHadir;
+            // const jmlMhsHadir = countHadir;
 
-            const newBeritaAcara = {
-                date,
-                jamMasuk,
-                jamKeluar,
-                descMateri,
-                dosenId,
-                pertemuanKe,
-                jmlMhsHadir, // Menambahkan jumlah mahasiswa yang hadir
-            };
+          
 
             const beritaAcara = await prisma.beritaAcara.create({
-                data: newBeritaAcara,
+                data: {
+                    date,
+                    jamMasuk,
+                    jamKeluar,
+                    descMateri,
+                    dosenId: parseInt(dosenId),
+                    pertemuanKe,
+                    jmlMhsHadir,
+    
+                }
             });
 
             res.status(200).json({
