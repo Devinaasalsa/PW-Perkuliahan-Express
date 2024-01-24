@@ -56,7 +56,10 @@ class AbsensiController {
   
       const createdAbsensi = await Promise.all(absenPromises);
   
-      res.json(createdAbsensi);
+      res.json({ 
+        statusCode:200, 
+        createdAbsensi
+      });
     } catch (error) {
       console.error('Terjadi kesalahan saat mengabsen siswa', error);
       res.status(500).json({ error: 'Terjadi kesalahan saat mengabsen siswa' });
@@ -72,7 +75,9 @@ class AbsensiController {
       console.error("Terjadi kesalahan saat menampilkan data absensi", error);
       res
         .status(500)
-        .json({ error: "Terjadi kesalahan saat menampilkan data absensi" });
+        .json({ 
+          statusCode:200, 
+          error: "Terjadi kesalahan saat menampilkan data absensi" });
     }
 
   }
@@ -106,7 +111,9 @@ class AbsensiController {
       // Ambil rekaman absensi terbaru
       const latestAbsensi = mahasiswa.absensi[0];
   
-      res.json(latestAbsensi);
+      res.json({
+        statusCode:200, 
+        latestAbsensi});
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data absensi" });

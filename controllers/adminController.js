@@ -11,7 +11,9 @@ class AdminController {
         
         const adminsWithoutPassword = admins.map(({ password, ...adminWithoutPassword }) => adminWithoutPassword);
 
-        res.status(200).json(adminsWithoutPassword);
+        res.status(200).json({
+            statusCode:200, 
+            adminsWithoutPassword});
     } catch (error) {
         console.error("Terjadi kesalahan saat menampilkan data admin", error);
         res.status(500).json({ error: "Terjadi kesalahan saat menampilkan data admin" });
@@ -92,7 +94,9 @@ class AdminController {
                     adminId: admin.id
                 },
             });
-            res.json(admin);
+            res.json({
+                statusCode:200, 
+                admin});
         }
         catch (error) {
             console.error("Terjadi kesalahan saat menambahkan data Admin", error);
