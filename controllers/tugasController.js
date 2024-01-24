@@ -218,14 +218,19 @@ class TugasController {
     try {
       const requiredFields = ['judul', 'deskripsi', 'dueDate', 'topik', 'dosenId'];
       const missingFields = requiredFields.filter(field => !req.body[field]);
-
+    
       if (missingFields.length > 0) {
         return res.status(400).json({
           success: false,
           message: `Field(s) ${missingFields.join(', ')} wajib diisi.`,
         });
       }
-
+    
+      // Fetch all Mahasiswa IDs from the database
+      const allMahasiswaIds = await prisma.mahasiswa.findMany({
+        select: { id: true },
+      });
+    
       const tugass = await prisma.tugas.create({
         data: {
           dosen: {
@@ -235,9 +240,9 @@ class TugasController {
           },
           matkul: {
             connect: {
-                id: matkulId,
+              id: matkulId,
             },
-        },
+          },
           deskripsi,
           judul,
           lampiran: req.files[0] ? req.files[0].filename : null,
@@ -250,25 +255,24 @@ class TugasController {
             },
           },
           assignedMahasiswa: {
-            connect: {
-              // This assumes that you have a method to retrieve all Mahasiswa IDs
-              id: {
-                in: await prisma.mahasiswa.findMany({
-                  select: { id: true },
-                }),
-              },
-            },
-          }
+            connect: allMahasiswaIds.map((mahasiswa) => ({ id: mahasiswa.id })),
+          },
         },
         include: {
           dosen: true,
-          assignedMahasiswa: true,
+          assignedMahasiswa: {
+            select: {
+              id:true,
+              mhsName: true
+            }
+          },
         }
       });
-
+    
       res.status(200).json({
         statusCode: 200,
-        tugass});
+        tugass,
+      });
     } catch (error) {
       console.log(error);
       console.error("Terjadi kesalahan saat menambahkan tugas");
@@ -276,6 +280,7 @@ class TugasController {
         .status(500)
         .json({ error: "Terjadi kesalahaan saat menambahkan tugas" });
     }
+    
   }
 
 

@@ -110,7 +110,7 @@ model BeritaAcara {
   dosenId     Int
   pertemuanKe String
   dosen       Dosen    @relation(fields: [dosenId], references: [id])
-  date        DateTime
+  date        String
   jamMasuk    String
   jamKeluar   String
   descMateri  String
