@@ -16,13 +16,14 @@ class AbsensiController {
     }
 
   }
+
   //input absensi harus berupa objek
   async inputAbsensi(req, res) {
     try {
-        const { pertemuanKe, absensiData } = req.body;
+        const { pertemuanKe, absensiData, date } = req.body;
 
         const absenPromises = absensiData.map(async (data) => {
-            const { mahasiswaId, statusId } = data;
+            const { mahasiswaId, statusId} = data;
 
             const existingMahasiswa = await prisma.mahasiswa.findUnique({
                 where: { id: mahasiswaId },
@@ -60,6 +61,7 @@ class AbsensiController {
             const absensi = await prisma.absensi.create({
                 data: {
                     pertemuanKe: pertemuanKe,
+                    date: date,
                     mahasiswa: {
                         connect: {
                             id: mahasiswaId,
@@ -84,8 +86,6 @@ class AbsensiController {
         res.status(500).json({ error: 'Terjadi kesalahan saat mengabsen siswa' });
     }
 }
-
-
 
   async getLatestAbsenByMhsId(req, res) {
     const { id } = req.params;
@@ -125,7 +125,25 @@ class AbsensiController {
     }
   }
   
+  async getAbsenByDate(req, res) {
+    const {pertemuanId} =req.params;
+    try {
+      const absens = await prisma.absensi.findMany({
+        where: {
+          pertemuanKe: pertemuanId
+        }
+      });
+      res.status(200).json(absens);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat menampilkan data absensi", error);
+      res
+        .status(500)
+        .json({ 
+          statusCode:200, 
+          error: "Terjadi kesalahan saat menampilkan data absensi" });
+    }
 
+  }
 }
 
 module.exports = AbsensiController;

@@ -8,6 +8,7 @@ const middlewareDosen = new MiddlewareDosen();
 
 
 router.get('/getAbsen', middlewareDosen.isDosen, absensiController.getAbsensi);
+router.get('/getAbsenByDate/:pertemuanId', middlewareDosen.isDosen, absensiController.getAbsenByDate);
 router.post('/inputAbsen/',  middlewareDosen.isDosen, absensiController.inputAbsensi);
 router.get('/getAbsenByMhsId/:id',  middlewareDosen.isDosen, absensiController.getLatestAbsenByMhsId);
 

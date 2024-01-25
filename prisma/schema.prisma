@@ -123,7 +123,8 @@ model BeritaAcara {
 model Absensi {
   id Int @id @default(autoincrement())
 
-  pertemuanKe Int
+  pertemuanKe String
+  date String
   mahasiswaId Int
   mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
 

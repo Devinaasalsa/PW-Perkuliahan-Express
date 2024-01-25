@@ -27,36 +27,47 @@ class TugasController {
           assignedMahasiswa: {
             select: {
               id: true,
-              mhsName: true
+              mhsName: true,
+              Jawaban: {
+                select: {
+                  lampiranJawaban: true,
+                  linkUrl: true,
+                  WaktuPengumpulan: true,
+                  statusTugasId: true,
+                },
+                where: {
+                  statusTugasId: 2, // Filter for completed assignments
+                }
+              }
             }
           },
         }
       });
-
+  
       // Update statusTugasId for each task based on the current date
       const updatedTugass = await Promise.all(
         tugass.map(async (tugas) => {
           let statusTugas;
-
+  
           if (new Date(tugas.dueDate) < new Date(now)) {
             statusTugas = 3; // Tugas lewat waktu
           } else {
             statusTugas = 1; // Tugas ditugaskan (belum lewat waktu)
           }
-
+  
           // Update statusTugasId in the database
           await prisma.tugas.update({
             where: { id: tugas.id },
             data: { statusTugasId: statusTugas },
           });
-
+  
           return {
             ...tugas,
             statusTugasId: statusTugas,
           };
         })
       );
-
+  
       res.status(200).json({
         statusCode: 200,
         updatedTugass
@@ -69,6 +80,7 @@ class TugasController {
       });
     }
   }
+  
 
   async searchTugas(req, res) {
     const { judul, topik } = req.query;
@@ -136,7 +148,18 @@ class TugasController {
           assignedMahasiswa: {
             select: {
               id: true,
-              mhsName: true
+              mhsName: true,
+              Jawaban: {
+                select: {
+                  lampiranJawaban: true,
+                  linkUrl: true,
+                  WaktuPengumpulan: true,
+                  statusTugasId: true,
+                },
+                where: {
+                  statusTugasId: 2, //completed
+                }
+              }
             }
           },
 
