@@ -24,6 +24,12 @@ class TugasController {
               dosenName: true
             }
           },
+          assignedMahasiswa: {
+            select: {
+              id: true,
+              mhsName: true
+            }
+          },
         }
       });
 
@@ -119,12 +125,21 @@ class TugasController {
               namaMatkul: true
             }
           },
+          
           dosen: {
             select: {
               id: true,
               dosenName: true
             }
           },
+
+          assignedMahasiswa: {
+            select: {
+              id: true,
+              mhsName: true
+            }
+          },
+
 
         }
       });
@@ -159,6 +174,12 @@ class TugasController {
               dosenName: true
             }
           },
+          assignedMahasiswa: {
+            select: {
+              id: true,
+              mhsName: true
+            }
+          },
 
         }
       });
@@ -191,6 +212,12 @@ class TugasController {
             select: {
               id: true,
               dosenName: true
+            }
+          },
+          assignedMahasiswa: {
+            select: {
+              id: true,
+              mhsName: true
             }
           },
 
