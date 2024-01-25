@@ -137,14 +137,12 @@ class TugasController {
               namaMatkul: true
             }
           },
-          
           dosen: {
             select: {
               id: true,
               dosenName: true
             }
           },
-
           assignedMahasiswa: {
             select: {
               id: true,
@@ -162,7 +160,6 @@ class TugasController {
               }
             }
           },
-
 
         }
       });
@@ -247,7 +244,7 @@ class TugasController {
         }
       });
       if (!tugass) {
-        return jes.json(400).json({ error: "Tugas tidak di temukan" });
+        return res.json(400).json({ error: "Tugas tidak di temukan" });
       }
       res.json(tugass);
     } catch (error) {
