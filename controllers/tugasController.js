@@ -34,6 +34,7 @@ class TugasController {
                   linkUrl: true,
                   WaktuPengumpulan: true,
                   statusTugasId: true,
+                  TugasID: true
                 },
                 where: {
                   statusTugasId: 2, // Filter for completed assignments
@@ -175,7 +176,16 @@ class TugasController {
   //get tugas sesuai topik yang dipilih
   async getTugasByTopik(req, res) {
     const { topik } = req.query;
+    const{mhsId, tugasId} = req.body;
     try {
+
+      const point = await prisma.jawaban.findFirst({
+        where: {
+          MahasiswaID: parseInt(mhsId),
+          TugasID: parseInt(tugasId)
+        }
+      })
+      
       const tugass = await prisma.tugas.findMany({
         where: {
           topik: topik
@@ -197,9 +207,27 @@ class TugasController {
           assignedMahasiswa: {
             select: {
               id: true,
-              mhsName: true
+              mhsName: true,
+              Jawaban: {
+                where:{
+                  MahasiswaID: mhsId,
+                  TugasID: tugasId    
+                }, 
+                select: {
+                  point: true
+                }
+              }
             }
           },
+          // Jawaban:{
+          //   where:{
+          //     MahasiswaID: mhsId,
+          //     TugasID: tugasId    
+          //   }, 
+          //   select: {
+          //     point: true
+          //   }
+          // }
 
         }
       });
@@ -237,7 +265,19 @@ class TugasController {
           assignedMahasiswa: {
             select: {
               id: true,
-              mhsName: true
+              mhsName: true,
+              Jawaban: {
+                select: {
+                  lampiranJawaban: true,
+                  linkUrl: true,
+                  WaktuPengumpulan: true,
+                  statusTugasId: true,
+                  TugasID: true
+                },
+                // where: {
+                //   statusTugasId: 2, // Filter for completed assignments
+                // }
+              }
             }
           },
 

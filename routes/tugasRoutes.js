@@ -8,9 +8,17 @@ const middlewareDosen = new MiddlewareDosen();
 
 router.get('/getTugas', tugasController.getAllTugas)
 router.get('/getTugas/:id', tugasController.getTugasById)
+
+//buat get topik tugas sesuai mata kuliah
 router.get('/getTugasByMatkul/:matkulId', tugasController.getTugasByMatkul)
+
+//get tugas sesuai topik yang dipilih
 router.get('/getTugasByTopik?', tugasController.getTugasByTopik)
+
+//buat get detail tugas (desc, lampiran, dll)
 router.get('/getMahasiswaByTugasId/:tugasId', tugasController.getMahasiswaByTugasId)
+
+// router.get('/getTugasByMahasiswa/:mhsId', tugasController.getTugasByMahasiswa)
 
 
 
