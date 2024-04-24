@@ -24,7 +24,7 @@ router.get('/getMahasiswaByTugasId/:tugasId', tugasController.getMahasiswaByTuga
 
 router.post('/createTugas/:matkulId', middlewareDosen.isDosen, tugasController.createTugas)
 router.put('/updateTugas/:id', tugasController.updateTugas)
-router.put('/updateNilai/:id', tugasController.updateNilaiTugas)
+router.put('/updateNilai/:tugasId', tugasController.updateNilaiTugas);
 router.put('/kumpulkanTugas/:tugasId', tugasController.kumpulkanTugas)
 router.get('/getKumpulkanTugas/:tugasId', tugasController.getTugasKumpulkanById)
 router.get('/getAllKumpulkanTugas', tugasController.getAllKumpulkanTugas)

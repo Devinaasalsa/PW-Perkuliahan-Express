@@ -408,27 +408,40 @@ class TugasController {
     }
   }
 
-  async updateNilaiTugas(req, res) {
-    const { point } = req.body;
-    const { tugasId, mahasiswaId } = req.params;
+async updateNilaiTugas(req, res) {
+    const { mahasiswaId, point } = req.body;
+    const { tugasId } = req.params;
+
     try {
-      const tugass = await prisma.jawaban.update({
-        where: {
-          TugasID: parseInt(tugasId),
-          MahasiswaID: parseInt(mahasiswaId),
-        },
-        data: {
-          point: parseInt(point),
-        },
-      });
-      res.status(200).json(tugass);
+        // Perbarui nilai jawaban untuk mahasiswa dan tugas tertentu
+        const updatedJawaban = await prisma.jawaban.updateMany({
+            where: {
+              MahasiswaID: parseInt(mahasiswaId),
+                TugasID: parseInt(tugasId)
+            },
+            data: {
+                point: point
+            }
+        });
+
+        if (updatedJawaban) {
+            return res.status(200).json({ message: "Nilai jawaban berhasil diperbarui." });
+        } else {
+            return res.status(404).json({ message: "Jawaban tidak ditemukan." });
+        }
     } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ error: "Terjadi kesalahan saat memberi nilai pada tugas" });
+        console.error("Error:", error);
+        return res.status(500).json({ message: "Terjadi kesalahan saat memperbarui nilai jawaban." });
     }
-  }
+}
+
+// Contoh pemanggilan fungsi updateNilaiTugas
+// Pastikan mengganti nilai req.body dan req.params sesuai dengan kebutuhan Anda
+// updateNilaiTugas(req, res);
+
+
+
+
 
   async kumpulkanTugas(req, res) {
     const { tugasId } = req.params;
