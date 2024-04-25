@@ -9,7 +9,7 @@ const middlewareDosen = new MiddlewareDosen();
 const middlewareAdmin = new MiddlewareAdmin();
 
 
-router.get('/getAcaraBerita', acaraBeritaController.getAllAcaraBerita)
+router.get('/getAcaraBerita', middlewareDosen.isDosen,acaraBeritaController.getAllAcaraBerita)
 router.get('/getAcaraDosen', middlewareDosen.isDosen, acaraBeritaController.getAcaraDosen)
 router.post('/createAcaraBerita', middlewareDosen.isDosen, acaraBeritaController.createAcaraBerita)
 router.put('/updateAcaraBerita/:id', middlewareDosen.isDosen, acaraBeritaController.updateAcaraBerita)
