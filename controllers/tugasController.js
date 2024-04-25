@@ -286,6 +286,11 @@ class TugasController {
       if (!tugass) {
         return res.json(400).json({ error: "Tugas tidak di temukan" });
       }
+
+      if (tugass.lampiran) {
+        // Jika ada, tambahkan URL gambar ke respons
+        tugass.lampiran = `http://localhost:7070/api/image/${tugass.lampiran}`;
+      }
       res.json(tugass);
     } catch (error) {
       console.log(error);
