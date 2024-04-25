@@ -12,5 +12,6 @@ const middlewareMahasiswa = new MiddlewareMahasiswa();
 router.get('/getFileKsr', KsrController.getFile);
 router.post('/addFile', KsrController.addFile);
 router.post('/uploadKsrMahasiswa/:ksrId',  middlewareMahasiswa.isMahasiswa, KsrController.uploadKsrMahasiswa);
+// app.use('/images', express.static(path.join(__dirname, 'tmp', 'images')));
 
 module.exports = router;

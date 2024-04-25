@@ -197,7 +197,7 @@ model Jawaban {
   statusTugas      StatusTugas? @relation(fields: [statusTugasId], references: [id])
   Mahasiswa        Mahasiswa    @relation(fields: [MahasiswaID], references: [id])
   MahasiswaID      Int
-}
+} 
 
 model StatusTugas {
   id          Int       @id @default(autoincrement())

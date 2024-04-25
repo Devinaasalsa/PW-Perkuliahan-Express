@@ -26,7 +26,12 @@ class MahasiswaController {
           id: parseInt(id),
         },
         include: {
-          assignedTugas: true,
+          assignedTugas: {
+            include: {
+              statusTugas:true
+            }
+          },
+          
       },
       });
       if (!mahasiswas) {

@@ -111,7 +111,7 @@ class FileKsrController {
 
     async getFile(req, res) {
         try {
-            const files = await prisma.ksrMahasiswa.findMany();
+            const files = await prisma.fileKsr.findMany();
             res.status(200).json(files);
           } catch (error) {
             console.error("Terjadi kesalahan saat menampilkan file", error);
