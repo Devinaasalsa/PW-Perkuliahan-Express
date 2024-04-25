@@ -25,6 +25,9 @@ class MahasiswaController {
         where: {
           id: parseInt(id),
         },
+        include: {
+          assignedTugas: true,
+      },
       });
       if (!mahasiswas) {
         return res.json(400).json({ error: "Mahasiswa tidak ditemukan" });
