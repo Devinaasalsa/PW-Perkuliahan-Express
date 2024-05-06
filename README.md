@@ -74,7 +74,6 @@ This is an example of how to list things you need to use the software and how to
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
 # SIM PERKULIAHAN
 
 <h1>Login Page</h1>
@@ -142,19 +141,6 @@ Fitur yang berfungsi untuk membuat acara untuk mahasiswa yang disediakan oleh do
 Menampikan berbagai mata kuliah yang sudah dibuat oleh Admin dengan disisipkan dosen yang bersangkutan untuk mata kuliah tersebut. Halaman tersebut juga menampilkan daftar tugas yang sudah dibuat oleh admin dan detail terkait tugas yang dibuat sehingga mahasiswa dapat mengerjakan dan mengirim ke dosen.
 
 <br></br>
-
-<hr>
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-  "# sim-perkuliahan"
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
